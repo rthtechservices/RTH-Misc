@@ -1,0 +1,17 @@
+{
+  "SPE_E3": {
+    "displayName": "Microsoft 365 E3",
+    "monthlyCost": 47.90,
+    "currency": "CAD"
+  },
+  "ENTERPRISEPACK": {
+    "displayName": "Office 365 E3",
+    "monthlyCost": 23.00,
+    "currency": "CAD"
+  },
+  "Microsoft_365_Copilot": {
+    "displayName": "Microsoft 365 Copilot",
+    "monthlyCost": 40.00,
+    "currency": "CAD"
+  }
+}

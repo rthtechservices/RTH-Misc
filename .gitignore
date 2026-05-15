@@ -1,0 +1,8 @@
+*.pfx
+*.cer
+*.crt
+*.key
+*.pem
+config/*local*.json
+**/config/*local*.json
+*secret*.json

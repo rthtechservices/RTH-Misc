@@ -1,10 +1,10 @@
 {
   "auth": {
     "mode": "AppCertificate",
-    "tenantId": "1ce279ff-f48b-4959-86d5-e9f16a768e6a",
-    "clientId": "00e80030-95f5-4f40-a626-6ee7b7932594",
-    "certificateThumbprint": "DA0A59E60F39539205E9FEBFFF9CC5BB21CD2514",
-    "exchangeOrganization": "rthtechservices.onmicrosoft.com"
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "clientId": "00000000-0000-0000-0000-000000000000",
+    "certificateThumbprint": "0000000000000000000000000000000000000000",
+    "exchangeOrganization": "contoso.onmicrosoft.com"
   }
 }
 
