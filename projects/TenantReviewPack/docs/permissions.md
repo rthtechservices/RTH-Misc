@@ -1,44 +1,24 @@
 # Permissions
 
-TenantReviewPack needs different Microsoft 365 permissions depending on which collectors are enabled.
+TenantReviewPack is read-only reporting. Grant only the permissions needed for the collectors you intend to run.
 
-## Module Prerequisites
-
-- Required: `Microsoft.Graph`
-- Optional for later Exchange collectors: `ExchangeOnlineManagement`
-
-Install commands:
+## Required Modules
 
 ```powershell
 Install-Module Microsoft.Graph -Scope CurrentUser
+```
+
+Optional:
+
+```powershell
 Install-Module ExchangeOnlineManagement -Scope CurrentUser
+Install-Module PnP.PowerShell -Scope CurrentUser
+Install-Module Microsoft.Online.SharePoint.PowerShell -Scope CurrentUser
 ```
 
-## Authentication Modes
+## Graph Application Permissions
 
-TenantReviewPack reads authentication from `ConnectConfig.json`.
-
-### AppCertificate
-
-Use app-only certificate authentication for repeatable tenant reviews:
-
-```json
-{
-  "auth": {
-    "mode": "AppCertificate",
-    "tenantId": "...",
-    "clientId": "...",
-    "certificateThumbprint": "...",
-    "exchangeOrganization": "contoso.onmicrosoft.com"
-  }
-}
-```
-
-The certificate must be installed in `Cert:\CurrentUser\My` or `Cert:\LocalMachine\My`. Do not commit PFX files, private keys, PEM files, exported certificates, or secret-bearing JSON files.
-
-### Interactive
-
-Use interactive authentication for development and troubleshooting. Interactive mode requests these delegated scopes:
+Likely application permissions for the full data pack:
 
 - `User.Read.All`
 - `Directory.Read.All`
@@ -46,24 +26,35 @@ Use interactive authentication for development and troubleshooting. Interactive 
 - `LicenseAssignment.Read.All`
 - `Reports.Read.All`
 - `AuditLog.Read.All`
+- `Device.Read.All`
+- `DeviceManagementManagedDevices.Read.All`
+- `Group.Read.All`
+- `Team.ReadBasic.All`
+- `TeamSettings.Read.All`
+- `Channel.ReadBasic.All` if channel-level expansion is added later
+- `Sites.Read.All` for SharePoint/OneDrive report and site reads where Graph is used
 
-## Required Microsoft Graph Permission Areas
-
-For the first real collectors, grant admin consent for these application permissions when using AppCertificate mode:
-
-- `User.Read.All`
-- `Directory.Read.All`
-- `Organization.Read.All`
-- `LicenseAssignment.Read.All`
-- `Reports.Read.All`
-- `AuditLog.Read.All`
-
-Additional collectors may later need permissions for groups, Teams, devices, directory roles, service health, SharePoint usage, and reporting endpoints.
+Admin consent is required for app-only certificate authentication.
 
 ## Exchange Online
 
-Exchange Online PowerShell will be required for the most reliable mailbox forwarding, inbox rule, shared mailbox, and transport rule data. Exchange connection is currently optional and does not fail the whole run unless explicitly configured as required.
+For Exchange app-only PowerShell:
 
-## SharePoint Online
+- API permission: `Office 365 Exchange Online` > `Exchange.ManageAsApp`
+- Admin consent granted
+- Supported role assignment for the app service principal, commonly `Exchange Administrator` for broad review access or a narrower supported Exchange role where sufficient
 
-SharePoint Online Management Shell or PnP PowerShell is recommended for site inventory, storage usage, and sharing posture.
+If this is not configured, the Exchange connection warning is expected and mailbox inventory returns limited/no Exchange data.
+
+## SharePoint
+
+The SharePoint collector prefers read-only posture:
+
+- PnP/SPO tenant site enumeration when already connected through supported app certificate auth
+- Graph report fallback where available
+- `Sites.Read.All` is generally preferred for read-only Graph access
+- Some tenant administration reads may require broader SharePoint app permissions depending on module and tenant policy
+
+## Sensitive Values
+
+Do not commit certificate files, private keys, exported certs, tokens, or secret-bearing JSON. The script reports only whether auth values were loaded and whether the certificate was found.

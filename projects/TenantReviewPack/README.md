@@ -2,46 +2,41 @@
 
 TenantReviewPack is a repeatable Microsoft 365 tenant review package generator.
 
-The goal is to collect tenant data, normalize it into clean JSON datasets, enrich the summaries with plain-language AI narratives, and generate a polished client-facing report and PowerPoint deck for quarterly or annual reviews.
+It connects to Microsoft 365, collects review-ready JSON datasets, produces deterministic narrative summaries, and renders simple Markdown/HTML report artifacts plus a deck outline.
 
-## Intended Output
+## Implemented Collectors
 
-- Executive report
-- PowerPoint slide deck
-- Raw JSON/CSV exports
-- Appendix-style technical evidence
-- Cost, security, usage, storage, device, and collaboration highlights
+- Tenant overview: organization and verified domain data from Microsoft Graph.
+- License inventory: subscribed SKUs, assigned/unused units, service plans, and local price-map estimates.
+- User inventory: users, guests, license state, enabled/disabled state, and sign-in staleness where Graph returns sign-in activity.
+- License/user analysis: unused license cost, disabled licensed users, stale licensed users, and licensed guests.
+- Mailbox inventory: Exchange mailbox forwarding, transport rules, optional inbox rules, and optional mailbox statistics when Exchange Online PowerShell is connected.
+- SharePoint and OneDrive: SharePoint sites from PnP/SPO when available, with Graph report fallback, plus optional OneDrive usage.
+- Teams: Teams-backed Microsoft 365 groups plus Teams usage report data where available.
+- Devices: Entra devices plus optional Intune managed-device data.
+- Copilot: Copilot-related SKU inventory, licensed users, and usage report data where available.
 
-## Current Project Status
+## Modules
 
-The scaffold now includes Microsoft Graph authentication plus the first production collectors:
-
-1. Tenant overview placeholder
-2. License inventory
-3. User inventory
-4. License and user analysis
-
-Mailbox, SharePoint, Teams, device, and Copilot collectors are still placeholders.
-
-## Prerequisites
-
-Install Microsoft Graph PowerShell before collecting data:
+Required for Graph authentication and most collectors:
 
 ```powershell
 Install-Module Microsoft.Graph -Scope CurrentUser
 ```
 
-Exchange Online support is prepared for later mailbox collectors. Install it only when those collectors are implemented or explicitly required:
+Optional modules:
 
 ```powershell
 Install-Module ExchangeOnlineManagement -Scope CurrentUser
+Install-Module PnP.PowerShell -Scope CurrentUser
+Install-Module Microsoft.Online.SharePoint.PowerShell -Scope CurrentUser
 ```
+
+Optional module absence is reported as a warning and the affected collector returns limited or empty data.
 
 ## Authentication
 
-Authentication is read from `ConnectConfig.json`. Do not copy tenant IDs, client IDs, certificate thumbprints, private keys, PFX files, or exported certificate material into other repo files.
-
-App-only certificate authentication uses this shape:
+Authentication is read from `ConnectConfig.json`:
 
 ```json
 {
@@ -55,11 +50,19 @@ App-only certificate authentication uses this shape:
 }
 ```
 
-The certificate thumbprint must exist in either `Cert:\CurrentUser\My` or `Cert:\LocalMachine\My`. The script reports whether the values were loaded and whether the certificate was found, but it does not print the tenant ID, client ID, or thumbprint.
+The script does not print tenant IDs, client IDs, certificate thumbprints, secrets, private keys, or tokens. The certificate thumbprint must exist in `Cert:\CurrentUser\My` or `Cert:\LocalMachine\My`.
 
-For development, `auth.mode` can be set to `Interactive`. Interactive mode requests delegated Graph scopes for user, directory, organization, license assignment, reports, and audit log reads.
+Interactive Graph mode is also supported for development.
 
-## Example Command
+## Run Validation
+
+```powershell
+.\Test-TenantReviewPack.ps1
+```
+
+The test parses scripts, dot-sources safe functions, runs analyzer/narrative/renderer mock checks, and fails if source files still contain old marker text.
+
+## Run Data Collection Only
 
 ```powershell
 .\Invoke-TenantReviewPack.ps1 `
@@ -70,28 +73,43 @@ For development, `auth.mode` can be set to `Interactive`. Interactive mode reque
   -SkipRender
 ```
 
-## Validation
-
-Parser and function-load validation does not require Microsoft 365 login:
+## Run Collection With Local Narrative and Rendering
 
 ```powershell
-.\Test-TenantReviewPack.ps1
+.\Invoke-TenantReviewPack.ps1 `
+  -TenantName "RTH Tech Services" `
+  -ReviewPeriod "Q2 2026" `
+  -ConnectConfigPath ".\ConnectConfig.json" `
+  -SkipAI
 ```
 
-## Expected Outputs
+`-SkipAI` skips external AI calls, but the script still creates a local rule-based narrative for renderers.
 
-Each run creates a timestamped folder under `output` with JSON datasets including:
+## Outputs
 
+Each run creates a timestamped folder under `output` with:
+
+- `TenantOverview.json`
 - `LicenseInventory.json`
 - `UserInventory.json`
 - `LicenseUserAnalysis.json`
+- `MailboxInventory.json`
+- `SharePoint.json`
+- `Teams.json`
+- `Devices.json`
+- `Copilot.json`
+- `Narrative.json` when narrative is not skipped
+- `TenantReviewReport.md` and `TenantReviewReport.html` when rendering is enabled
+- `TenantReviewDeckOutline.md` when rendering is enabled
+
+## AI Narrative
+
+AI is optional. Configure `config/sample.settings.json` under `ai` and set the API key only in the environment variable named by `apiKeyEnvironmentVariable`. If AI is disabled, missing configuration, or returns invalid JSON, TenantReviewPack falls back to deterministic local narrative sections.
 
 ## Known Limitations
 
-- Microsoft Graph does not provide exact client license pricing. License costs come from a local price map such as `config/license-prices.sample.json`.
-- `signInActivity` may be unavailable depending on permissions, licensing, and Graph API behavior. User collection falls back to a no-sign-in query and records a warning.
-- Exchange collectors are not implemented yet. Exchange Online authentication readiness is optional and does not fail the run unless configured as required.
-
-## Design Principle
-
-The scripts own the facts and layout. AI only writes short, client-friendly explanations based on supplied JSON.
+- Microsoft Graph does not provide exact client license pricing. Pricing comes from `config/license-prices.sample.json` or another local price map.
+- `signInActivity` may be unavailable depending on tenant licensing, permissions, and Graph API behavior.
+- Exchange app-only auth requires `Exchange.ManageAsApp` and a supported Exchange/Entra role assignment for the app service principal.
+- SharePoint tenant settings require PnP/SPO module connectivity; otherwise the collector uses Graph usage reports where available.
+- Graph report endpoints may return no data when reports are disabled, delayed, or not licensed.
