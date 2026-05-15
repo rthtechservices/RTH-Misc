@@ -1,0 +1,25 @@
+{
+  "graph": {
+    "tenantId": "00000000-0000-0000-0000-000000000000",
+    "clientId": "00000000-0000-0000-0000-000000000000",
+    "authMode": "Interactive"
+  },
+  "exchangeOnline": {
+    "enabled": true,
+    "authMode": "Interactive"
+  },
+  "sharePoint": {
+    "adminUrl": "https://contoso-admin.sharepoint.com",
+    "enabled": true
+  },
+  "ai": {
+    "enabled": false,
+    "endpoint": "https://example.openai.azure.com/openai/deployments/YOUR_DEPLOYMENT/chat/completions?api-version=2025-01-01-preview",
+    "apiKeyEnvironmentVariable": "TENANT_REVIEW_AI_API_KEY",
+    "model": "configured-by-endpoint"
+  },
+  "rendering": {
+    "reportTemplate": "templates/report-template.docx",
+    "deckTemplate": "templates/deck-template.pptx"
+  }
+}
