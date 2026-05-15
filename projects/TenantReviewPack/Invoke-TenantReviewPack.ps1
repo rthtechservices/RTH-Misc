@@ -88,6 +88,7 @@ function New-InteractiveConnectConfigFromSettings {
     }
 }
 
+. (Resolve-LocalScript 'src\Shared\TenantReview.Helpers.ps1')
 . (Resolve-LocalScript 'src\Shared\Connect-TenantReviewServices.ps1')
 . (Resolve-LocalScript 'src\Shared\Export-TenantReviewJson.ps1')
 . (Resolve-LocalScript 'src\Collectors\Get-TenantOverview.ps1')
@@ -174,18 +175,26 @@ if ($connectionStatus.Warnings.Count -gt 0) {
     }
 }
 
-$datasets = [ordered]@{
-    TenantOverview     = Get-TenantOverview -TenantName $TenantName -ReviewPeriod $ReviewPeriod
-    LicenseInventory  = Get-LicenseInventory -PriceMapPath $priceMapPath -DefaultCurrency $defaultCurrency
-    UserInventory     = Get-UserInventory
-    MailboxInventory  = Get-MailboxInventory
-    SharePoint        = Get-SharePointInventory
-    Teams             = Get-TeamsInventory
-    Devices           = Get-DeviceInventory
-    Copilot           = Get-CopilotInventory
-}
+$includeInboxRules = Test-TenantReviewTruthy -Value (Get-TenantReviewConfigValue -Settings $settings -Path @('exchangeOnline', 'includeInboxRules') -Default $false)
+$includeMailboxStatistics = Test-TenantReviewTruthy -Value (Get-TenantReviewConfigValue -Settings $settings -Path @('exchangeOnline', 'includeMailboxStatistics') -Default $false)
+$inboxRuleMailboxLimit = [int](Get-TenantReviewConfigValue -Settings $settings -Path @('exchangeOnline', 'inboxRuleMailboxLimit') -Default 200)
+$includeOneDrive = Test-TenantReviewTruthy -Value (Get-TenantReviewConfigValue -Settings $settings -Path @('sharePoint', 'includeOneDrive') -Default $true)
+$sharePointReportPeriodDays = [int](Get-TenantReviewConfigValue -Settings $settings -Path @('sharePoint', 'reportPeriodDays') -Default 90)
+$teamsReportPeriodDays = [int](Get-TenantReviewConfigValue -Settings $settings -Path @('teams', 'reportPeriodDays') -Default 90)
+$includeOwnersAndMembers = Test-TenantReviewTruthy -Value (Get-TenantReviewConfigValue -Settings $settings -Path @('teams', 'includeOwnersAndMembers') -Default $false)
+$deviceStaleAfterDays = [int](Get-TenantReviewConfigValue -Settings $settings -Path @('devices', 'staleAfterDays') -Default 90)
+$includeIntune = Test-TenantReviewTruthy -Value (Get-TenantReviewConfigValue -Settings $settings -Path @('devices', 'includeIntune') -Default $true)
 
+$datasets = [ordered]@{}
+$datasets['TenantOverview'] = Get-TenantOverview -TenantName $TenantName -ReviewPeriod $ReviewPeriod
+$datasets['LicenseInventory'] = Get-LicenseInventory -PriceMapPath $priceMapPath -DefaultCurrency $defaultCurrency
+$datasets['UserInventory'] = Get-UserInventory
 $datasets['LicenseUserAnalysis'] = Get-LicenseUserAnalysis -LicenseInventory $datasets.LicenseInventory -UserInventory $datasets.UserInventory
+$datasets['MailboxInventory'] = Get-MailboxInventory -IncludeInboxRules:$includeInboxRules -InboxRuleMailboxLimit $inboxRuleMailboxLimit -IncludeMailboxStatistics:$includeMailboxStatistics
+$datasets['SharePoint'] = Get-SharePointInventory -ReportPeriodDays $sharePointReportPeriodDays -IncludeOneDrive:$includeOneDrive
+$datasets['Teams'] = Get-TeamsInventory -ReportPeriodDays $teamsReportPeriodDays -IncludeOwnersAndMembers:$includeOwnersAndMembers
+$datasets['Devices'] = Get-DeviceInventory -StaleAfterDays $deviceStaleAfterDays -IncludeIntune:$includeIntune
+$datasets['Copilot'] = Get-CopilotInventory -LicenseInventory $datasets.LicenseInventory -UserInventory $datasets.UserInventory -PriceMapPath $priceMapPath
 
 foreach ($key in $datasets.Keys) {
     Export-TenantReviewJson -InputObject $datasets[$key] -Path (Join-Path $runPath "$key.json")
@@ -193,17 +202,28 @@ foreach ($key in $datasets.Keys) {
 
 if (-not $SkipAI) {
     $narrative = Invoke-AINarrative -Datasets $datasets -Settings $settings
-    Export-TenantReviewJson -InputObject $narrative -Path (Join-Path $runPath 'Narrative.json')
 } else {
-    $narrative = [pscustomobject]@{
-        skipped = $true
-        reason = 'SkipAI was specified.'
-    }
+    $narrative = Invoke-AINarrative -Datasets $datasets -Settings ([pscustomobject]@{
+        ai = [pscustomobject]@{
+            enabled = $false
+        }
+    })
+    $narrative.warnings = @($narrative.warnings + 'SkipAI was specified; generated local deterministic narrative only.')
 }
+Export-TenantReviewJson -InputObject $narrative -Path (Join-Path $runPath 'Narrative.json')
 
 if (-not $SkipRender) {
-    New-TenantReviewReport -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
-    New-TenantReviewDeck -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
+    try {
+        New-TenantReviewReport -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
+    } catch {
+        Write-Warning "Report rendering failed after data export completed. $($_.Exception.Message)"
+    }
+
+    try {
+        New-TenantReviewDeck -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
+    } catch {
+        Write-Warning "Deck outline rendering failed after data export completed. $($_.Exception.Message)"
+    }
 }
 
 Write-Host "Tenant review package generation complete." -ForegroundColor Green

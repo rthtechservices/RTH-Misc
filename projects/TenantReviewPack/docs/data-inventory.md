@@ -1,91 +1,73 @@
 # Data Inventory
 
-This document tracks the datasets planned for TenantReviewPack.
-
 ## Tenant Overview
 
-- Organization name
-- Tenant ID
-- Domains
-- Verified domains
-- Default domain
-- Service health summary
+- Organization display name
+- Tenant ID presence flag by default
+- Default and initial domains
+- Verified, federated, and total domain counts
+- Domain authentication type and supported services
+- Password validity period, assigned plan count, and technical notification mails where available
 
 ## Licensing
 
 - Subscribed SKUs from `Get-MgSubscribedSku`
-- SKU part number and mapped display name
-- Capability status
-- Purchased/enabled units
-- Assigned/consumed units
-- Suspended units
-- Warning units
-- Unused units
-- Local price-map monthly unit cost
-- Estimated monthly and annual license cost
-- Estimated unused monthly and annual license cost
-- Service plan count and simple service plan status
+- Purchased, assigned, suspended, warning, and unused units
+- SKU display names and monthly costs from local price map
+- Estimated monthly and annual costs
+- Estimated unused monthly and annual costs
+- Service plan names and provisioning status
 
 ## Users
 
-- Member and guest users from `Get-MgUser`
-- Account enabled/disabled state
-- User profile fields including department, job title, and company
-- Assigned license count and assigned SKU IDs
-- Last successful, interactive, and non-interactive sign-in timestamps when Graph returns `signInActivity`
-- Stale users based on last successful sign-in and the configured threshold
-- Licensed disabled users
-- Licensed stale users
-- Guest users with licenses
-- Users without sign-in data
-
-`signInActivity` may be unavailable depending on permissions, tenant licensing, and Graph API behavior. The collector retries without sign-in activity and records a warning instead of failing the whole run.
+- Members and guests from `Get-MgUser`
+- Enabled/disabled account state
+- Department, job title, company, mail, and UPN
+- Assigned SKU IDs and license counts
+- Sign-in activity when available
+- Stale, licensed-stale, and licensed-disabled flags
+- Guest users with assigned licenses
 
 ## License and User Analysis
 
-- Unused license count
-- Estimated unused monthly and annual cost
-- Disabled users with licenses
+- Unused license count and estimated unused spend
+- Disabled licensed users
 - Stale licensed users
-- Guest users with licenses
-- Plain-English attention items for review follow-up
+- Guest licensed users
+- Plain-English attention items
 
-## Exchange Online
+## Mailbox
 
-- User mailboxes
-- Shared mailboxes
-- Mailbox forwarding
-- Inbox rules with forwarding
-- Transport rules
-- Mailbox sizes
+- User, shared, room, and equipment mailbox counts
+- Mailbox-level forwarding settings
+- External forwarding suspicion
+- Transport rules and enabled rule count
+- Optional inbox forwarding rule scan
+- Optional mailbox sizes and largest mailboxes
 
 ## SharePoint and OneDrive
 
-- Sites
-- Storage usage
-- External sharing posture
-- OneDrive usage
-- Largest sites and OneDrives
+- Tenant sites from PnP/SPO where available
+- Graph SharePoint usage report fallback
+- Site URL, title, template, storage usage, quota, modified date, and sharing capability
+- OneDrive owner, URL, storage, active file, and file counts when enabled
 
 ## Teams
 
-- Teams inventory
-- Activity reports
-- Inactive teams
-- Meetings and messages where available
+- Teams-backed Microsoft 365 groups
+- Team visibility, created date, archive state where available
+- Optional owner and member counts
+- Teams activity report metrics such as last activity, channel messages, replies, and meetings
 
 ## Devices
 
-- Entra devices
-- Intune managed devices where available
-- Compliance status
-- Operating system versions
-- Stale devices
-- Office activation reports
+- Entra device ID, display name, enabled state, OS, OS version, trust type, and approximate last sign-in
+- Stale device flag
+- Optional Intune managed status, compliance state, and primary user
 
 ## Copilot
 
-- Assigned licenses
-- Active users
-- Usage trend
-- Inactive licensed users
+- Copilot-related SKUs matched from license inventory
+- Purchased, assigned, unused, and estimated spend
+- Licensed Copilot users from user inventory
+- Copilot usage report when the tenant and Graph module expose it
