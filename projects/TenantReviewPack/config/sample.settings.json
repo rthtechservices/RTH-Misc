@@ -6,7 +6,10 @@
   },
   "exchangeOnline": {
     "enabled": true,
-    "authMode": "Interactive"
+    "authMode": "Interactive",
+    "includeInboxRules": false,
+    "includeMailboxStatistics": false,
+    "inboxRuleMailboxLimit": 200
   },
   "licensePricing": {
     "enabled": true,
@@ -15,7 +18,17 @@
   },
   "sharePoint": {
     "adminUrl": "https://contoso-admin.sharepoint.com",
-    "enabled": true
+    "enabled": true,
+    "includeOneDrive": true,
+    "reportPeriodDays": 90
+  },
+  "teams": {
+    "reportPeriodDays": 90,
+    "includeOwnersAndMembers": false
+  },
+  "devices": {
+    "staleAfterDays": 90,
+    "includeIntune": true
   },
   "ai": {
     "enabled": false,

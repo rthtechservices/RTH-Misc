@@ -43,7 +43,7 @@ function Connect-TenantReviewServices {
         return ($Value.ToString() -in @('true', '1', 'yes', 'enabled'))
     }
 
-    function Assert-ReviewModule {
+    function Import-ReviewRequiredModule {
         param([Parameter(Mandatory = $true)][string]$Name)
 
         if (-not (Get-Module -ListAvailable -Name $Name)) {
@@ -51,6 +51,17 @@ function Connect-TenantReviewServices {
         }
 
         Import-Module $Name -ErrorAction Stop
+    }
+
+    function Import-ReviewOptionalModule {
+        param([Parameter(Mandatory = $true)][string]$Name)
+
+        if (-not (Get-Module -ListAvailable -Name $Name)) {
+            return $false
+        }
+
+        Import-Module $Name -ErrorAction Stop
+        return $true
     }
 
     function Find-ReviewCertificate {
@@ -90,15 +101,31 @@ function Connect-TenantReviewServices {
     }
 
     $warnings = @()
-    $requiredGraphModules = @(
-        'Microsoft.Graph.Authentication',
+    Import-ReviewRequiredModule -Name 'Microsoft.Graph.Authentication'
+
+    $graphCollectorModules = @(
         'Microsoft.Graph.Identity.DirectoryManagement',
         'Microsoft.Graph.Users',
-        'Microsoft.Graph.Reports'
+        'Microsoft.Graph.Groups',
+        'Microsoft.Graph.Reports',
+        'Microsoft.Graph.DeviceManagement'
     )
+    foreach ($moduleName in $graphCollectorModules) {
+        try {
+            if (-not (Import-ReviewOptionalModule -Name $moduleName)) {
+                $warnings += "Microsoft Graph module '$moduleName' is not installed. Related collectors may return limited data. Install it with: Install-Module Microsoft.Graph -Scope CurrentUser"
+            }
+        } catch {
+            $warnings += "Microsoft Graph module '$moduleName' could not be imported. Related collectors may return limited data. $($_.Exception.Message)"
+        }
+    }
 
-    foreach ($moduleName in $requiredGraphModules) {
-        Assert-ReviewModule -Name $moduleName
+    try {
+        if (Get-Module -ListAvailable -Name 'Microsoft.Graph.Beta.Reports') {
+            Import-Module Microsoft.Graph.Beta.Reports -ErrorAction Stop
+        }
+    } catch {
+        $warnings += "Microsoft.Graph.Beta.Reports could not be imported. Copilot reports may be unavailable. $($_.Exception.Message)"
     }
 
     $authConfig = Get-ReviewProperty -InputObject $ConnectConfig -Name 'auth'
@@ -116,6 +143,8 @@ function Connect-TenantReviewServices {
     $thumbprint = Get-ReviewProperty -InputObject $authConfig -Name 'certificateThumbprint'
     $certificateFound = $false
     $exchangeOnlineConnected = $false
+    $pnpConnected = $false
+    $spoConnected = $false
 
     Write-Verbose ("Connection config loaded. Mode: {0}; tenant id present: {1}; client id present: {2}; certificate thumbprint present: {3}" -f $mode, [bool]$tenantId, [bool]$clientId, [bool]$thumbprint)
 
@@ -190,6 +219,36 @@ function Connect-TenantReviewServices {
         }
     }
 
+    $sharePointSettings = Get-ReviewProperty -InputObject $Settings -Name 'sharePoint'
+    $sharePointEnabled = Test-ReviewTruthy -Value (Get-ReviewProperty -InputObject $sharePointSettings -Name 'enabled')
+    $sharePointAdminUrl = Get-ReviewProperty -InputObject $sharePointSettings -Name 'adminUrl'
+    if ($sharePointEnabled) {
+        if (-not $sharePointAdminUrl) {
+            $warnings += 'SharePoint connection was skipped because sharePoint.adminUrl is not configured.'
+        } elseif (Get-Module -ListAvailable -Name 'PnP.PowerShell') {
+            try {
+                Import-Module PnP.PowerShell -ErrorAction Stop
+                if ($mode -eq 'AppCertificate') {
+                    Connect-PnPOnline -Url $sharePointAdminUrl -ClientId $clientId -Tenant $tenantId -Thumbprint $thumbprint -ErrorAction Stop
+                } else {
+                    Connect-PnPOnline -Url $sharePointAdminUrl -Interactive -ErrorAction Stop
+                }
+                $pnpConnected = $true
+            } catch {
+                $warnings += "PnP.PowerShell connection was skipped after an error: $($_.Exception.Message)"
+            }
+        } elseif (Get-Module -ListAvailable -Name 'Microsoft.Online.SharePoint.PowerShell') {
+            try {
+                Import-Module Microsoft.Online.SharePoint.PowerShell -ErrorAction Stop
+                $warnings += 'Microsoft.Online.SharePoint.PowerShell is installed, but app-certificate connection is not attempted by this script. SharePoint collector will use Graph reports or existing SPO connection where available.'
+            } catch {
+                $warnings += "SharePoint Online module could not be imported: $($_.Exception.Message)"
+            }
+        } else {
+            $warnings += 'PnP.PowerShell and Microsoft.Online.SharePoint.PowerShell are not installed; SharePoint collector will use Graph reports where available.'
+        }
+    }
+
     [pscustomobject]@{
         GraphConnected          = $true
         GraphAuthMode           = $mode
@@ -197,6 +256,8 @@ function Connect-TenantReviewServices {
         GraphClientIdLoaded     = [bool]$clientId
         CertificateFound        = $certificateFound
         ExchangeOnlineConnected = $exchangeOnlineConnected
+        PnPConnected            = $pnpConnected
+        SPOConnected            = $spoConnected
         Warnings                = @($warnings)
     }
 }
