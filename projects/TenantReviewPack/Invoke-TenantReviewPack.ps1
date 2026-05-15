@@ -20,9 +20,15 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-function Import-LocalScript {
+function Resolve-LocalScript {
     param([Parameter(Mandatory = $true)][string]$RelativePath)
-    . (Join-Path $PSScriptRoot $RelativePath)
+
+    $scriptPath = Join-Path $PSScriptRoot $RelativePath
+    if (-not (Test-Path $scriptPath)) {
+        throw "Required script was not found: $scriptPath"
+    }
+
+    return $scriptPath
 }
 
 function Get-ObjectPropertyValue {
@@ -82,20 +88,20 @@ function New-InteractiveConnectConfigFromSettings {
     }
 }
 
-Import-LocalScript 'src\Shared\Connect-TenantReviewServices.ps1'
-Import-LocalScript 'src\Shared\Export-TenantReviewJson.ps1'
-Import-LocalScript 'src\Collectors\Get-TenantOverview.ps1'
-Import-LocalScript 'src\Collectors\Get-LicenseInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-UserInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-MailboxInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-SharePointInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-TeamsInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-DeviceInventory.ps1'
-Import-LocalScript 'src\Collectors\Get-CopilotInventory.ps1'
-Import-LocalScript 'src\Analyzers\Get-LicenseUserAnalysis.ps1'
-Import-LocalScript 'src\AI\Invoke-AINarrative.ps1'
-Import-LocalScript 'src\Renderers\New-TenantReviewReport.ps1'
-Import-LocalScript 'src\Renderers\New-TenantReviewDeck.ps1'
+. (Resolve-LocalScript 'src\Shared\Connect-TenantReviewServices.ps1')
+. (Resolve-LocalScript 'src\Shared\Export-TenantReviewJson.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-TenantOverview.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-LicenseInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-UserInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-MailboxInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-SharePointInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-TeamsInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-DeviceInventory.ps1')
+. (Resolve-LocalScript 'src\Collectors\Get-CopilotInventory.ps1')
+. (Resolve-LocalScript 'src\Analyzers\Get-LicenseUserAnalysis.ps1')
+. (Resolve-LocalScript 'src\AI\Invoke-AINarrative.ps1')
+. (Resolve-LocalScript 'src\Renderers\New-TenantReviewReport.ps1')
+. (Resolve-LocalScript 'src\Renderers\New-TenantReviewDeck.ps1')
 
 if (-not (Test-Path $OutputPath)) {
     New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null

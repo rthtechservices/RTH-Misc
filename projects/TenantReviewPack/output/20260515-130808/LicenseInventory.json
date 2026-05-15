@@ -1,0 +1,619 @@
+{
+  "dataset": "LicenseInventory",
+  "generatedAt": "2026-05-15T13:08:13.2410677-07:00",
+  "summary": {
+    "totalSkus": 10,
+    "totalPurchased": 1050005,
+    "totalAssigned": 12,
+    "totalUnused": 1049993,
+    "estimatedMonthlyCost": 40.0,
+    "estimatedAnnualCost": 480.0,
+    "estimatedUnusedMonthlyCost": 0.0,
+    "estimatedUnusedAnnualCost": 0.0,
+    "currency": "CAD",
+    "skusMissingPrice": [
+      "CCIBOTS_PRIVPREV_VIRAL",
+      "FLOW_FREE",
+      "Microsoft_Teams_Audio_Conferencing_select_dial_out",
+      "O365_BUSINESS_PREMIUM",
+      "POWER_BI_STANDARD",
+      "Power_Pages_vTrial_for_Makers",
+      "POWERAPPS_DEV",
+      "POWERAPPS_VIRAL",
+      "POWERAUTOMATE_ATTENDED_RPA"
+    ]
+  },
+  "items": [
+    {
+      "skuId": "639dec6b-bb19-468b-871c-c5c441c4b0cb",
+      "skuPartNumber": "Microsoft_365_Copilot",
+      "displayName": "Microsoft 365 Copilot",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 1,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 0,
+      "monthlyUnitCost": 40.0,
+      "currency": "CAD",
+      "estimatedMonthlyCost": 40.0,
+      "estimatedAnnualCost": 480.0,
+      "estimatedUnusedMonthlyCost": 0.0,
+      "estimatedUnusedAnnualCost": 0.0,
+      "servicePlanCount": 10,
+      "servicePlans": [
+        {
+          "servicePlanName": "WORKPLACE_ANALYTICS_INSIGHTS_BACKEND",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "WORKPLACE_ANALYTICS_INSIGHTS_USER",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "COPILOT_STUDIO_IN_COPILOT_FOR_M365",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_SHAREPOINT",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "GRAPH_CONNECTORS_COPILOT",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_CONNECTORS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_APPS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_TEAMS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_BUSINESS_CHAT",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_COPILOT_INTELLIGENT_SEARCH",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "f30db892-07e9-47e9-837c-80727f46fd3d",
+      "skuPartNumber": "FLOW_FREE",
+      "displayName": "FLOW_FREE",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 10000,
+      "assignedUnits": 2,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 9998,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 3,
+      "servicePlans": [
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "FLOW_P2_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "606b54a9-78d8-4298-ad8b-df6ef4481c80",
+      "skuPartNumber": "CCIBOTS_PRIVPREV_VIRAL",
+      "displayName": "CCIBOTS_PRIVPREV_VIRAL",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 10000,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 9999,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 3,
+      "servicePlans": [
+        {
+          "servicePlanName": "FLOW_CCI_BOTS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "CCIBOTS_PRIVPREV_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_CCI_BOTS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "dcb1a3ae-b33f-4487-846a-a640262fadf4",
+      "skuPartNumber": "POWERAPPS_VIRAL",
+      "displayName": "POWERAPPS_VIRAL",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 10000,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 9999,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 5,
+      "servicePlans": [
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "FLOW_P2_VIRAL_REAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "POWERAPPS_P2_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "FLOW_P2_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "f245ecc8-75af-4f8e-b61f-27d8114de5f3",
+      "skuPartNumber": "O365_BUSINESS_PREMIUM",
+      "displayName": "O365_BUSINESS_PREMIUM",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 1,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 0,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 43,
+      "servicePlans": [
+        {
+          "servicePlanName": "INSIGHTS_BY_MYANALYTICS",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "MICROSOFT_MYANALYTICS_FULL",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "PEOPLE_SKILLS_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "PLACES_CORE",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "GRAPH_CONNECTORS_SEARCH_INDEX",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MESH_IMMERSIVE_FOR_TEAMS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MESH_AVATARS_ADDITIONAL_FOR_TEAMS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MESH_AVATARS_FOR_TEAMS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MICROSOFT_LOOP",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "Bing_Chat_Enterprise",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "CLIPCHAMP",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "M365_LIGHTHOUSE_CUSTOMER_PLAN1",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "VIVAENGAGE_CORE",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "VIVA_LEARNING_SEEDED",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "Nucleus",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "RMS_S_BASIC",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "POWER_VIRTUAL_AGENTS_O365_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "CDS_O365_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "PROJECT_O365_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_O365_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MICROSOFT_SEARCH",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "WHITEBOARD_PLAN1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MYANALYTICS_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "DYN365BC_MS_INVOICING",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "KAIZALA_O365_P2",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "STREAM_O365_SMB",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "Deskless",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "BPOS_S_TODO_1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MICROSOFTBOOKINGS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "FORMS_PLAN_E1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "FLOW_O365_P1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "POWERAPPS_O365_P1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "O365_SB_Relationship_Management",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "TEAMS1",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "PROJECTWORKMANAGEMENT",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "SWAY",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "INTUNE_O365",
+          "provisioningStatus": "PendingActivation",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "SHAREPOINTWAC",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "OFFICE_BUSINESS",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "YAMMER_ENTERPRISE",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "EXCHANGE_S_STANDARD",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "MCOSTANDARD",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "SHAREPOINTSTANDARD",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "a403ebcc-fae0-4ca2-8c8c-7a907fd6c235",
+      "skuPartNumber": "POWER_BI_STANDARD",
+      "displayName": "POWER_BI_STANDARD",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 1000001,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 1000000,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 3,
+      "servicePlans": [
+        {
+          "servicePlanName": "PURVIEW_DISCOVERY",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "BI_AZURE_P0",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "3f9f06f5-3c31-472c-985f-62d9c10ec167",
+      "skuPartNumber": "Power_Pages_vTrial_for_Makers",
+      "displayName": "Power_Pages_vTrial_for_Makers",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 10000,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 9999,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 3,
+      "servicePlans": [
+        {
+          "servicePlanName": "POWER_PAGES_VTRIAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "eda1941c-3c4f-4995-b5eb-e85a42175ab9",
+      "skuPartNumber": "POWERAUTOMATE_ATTENDED_RPA",
+      "displayName": "POWERAUTOMATE_ATTENDED_RPA",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 1,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 0,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 3,
+      "servicePlans": [
+        {
+          "servicePlanName": "POWER_AUTOMATE_ATTENDED_RPA",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "CDS_ATTENDED_RPA",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "1c27243e-fb4d-42b1-ae8c-fe25c9616588",
+      "skuPartNumber": "Microsoft_Teams_Audio_Conferencing_select_dial_out",
+      "displayName": "Microsoft_Teams_Audio_Conferencing_select_dial_out",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 1,
+      "assignedUnits": 1,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 0,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 1,
+      "servicePlans": [
+        {
+          "servicePlanName": "MCOMEETBASIC",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    },
+    {
+      "skuId": "5b631642-bd26-49fe-bd20-1daaa972ef80",
+      "skuPartNumber": "POWERAPPS_DEV",
+      "displayName": "POWERAPPS_DEV",
+      "capabilityStatus": "Enabled",
+      "purchasedUnits": 10000,
+      "assignedUnits": 2,
+      "suspendedUnits": 0,
+      "warningUnits": 0,
+      "unusedUnits": 9998,
+      "monthlyUnitCost": null,
+      "currency": "CAD",
+      "estimatedMonthlyCost": null,
+      "estimatedAnnualCost": null,
+      "estimatedUnusedMonthlyCost": null,
+      "estimatedUnusedAnnualCost": null,
+      "servicePlanCount": 4,
+      "servicePlans": [
+        {
+          "servicePlanName": "EXCHANGE_S_FOUNDATION",
+          "provisioningStatus": "Success",
+          "appliesTo": "Company"
+        },
+        {
+          "servicePlanName": "DYN365_CDS_DEV_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "FLOW_DEV_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        },
+        {
+          "servicePlanName": "POWERAPPS_DEV_VIRAL",
+          "provisioningStatus": "Success",
+          "appliesTo": "User"
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

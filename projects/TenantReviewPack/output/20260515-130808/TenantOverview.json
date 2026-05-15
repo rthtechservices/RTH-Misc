@@ -1,0 +1,15 @@
+{
+  "dataset": "TenantOverview",
+  "tenantName": "rthtechservices",
+  "reviewPeriod": "2026",
+  "generatedAt": "2026-05-15T13:08:12.9138873-07:00",
+  "summary": {
+    "domainsConfigured": null,
+    "verifiedDomains": null,
+    "defaultDomain": null,
+    "tenantId": null,
+    "organizationName": null
+  },
+  "raw": [],
+  "implementationStatus": "Stub - connect to Microsoft Graph organization/domains endpoints."
+}

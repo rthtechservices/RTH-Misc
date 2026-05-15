@@ -1,0 +1,11 @@
+{
+  "dataset": "CopilotInventory",
+  "summary": {
+    "copilotLicenses": null,
+    "assignedCopilotLicenses": null,
+    "activeCopilotUsers": null,
+    "inactiveCopilotUsers": null
+  },
+  "items": [],
+  "implementationStatus": "Stub - add Copilot license and usage collection logic here."
+}

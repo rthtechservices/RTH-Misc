@@ -1,0 +1,25 @@
+{
+  "dataset": "LicenseUserAnalysis",
+  "generatedAt": "2026-05-15T13:08:14.3191743-07:00",
+  "summary": {
+    "unusedLicenseCount": 1049993,
+    "estimatedUnusedMonthlyCost": 0.0,
+    "estimatedUnusedAnnualCost": 0.0,
+    "disabledLicensedUserCount": 0,
+    "staleLicensedUserCount": 0,
+    "guestLicensedUserCount": 0,
+    "attentionItemCount": 1
+  },
+  "attentionItems": [
+    {
+      "severity": "Medium",
+      "headline": "1049993 purchased licenses appear unused",
+      "plainEnglish": "These licenses are available in the tenant but are not currently assigned to users.",
+      "businessImpact": "The tenant may be carrying license capacity that is not being used.",
+      "recommendedAction": "Review upcoming hiring, project, and retention needs before reducing or reallocating licenses."
+    }
+  ],
+  "disabledLicensedUsers": [],
+  "staleLicensedUsers": [],
+  "guestLicensedUsers": []
+}
