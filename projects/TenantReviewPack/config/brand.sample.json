@@ -1,0 +1,15 @@
+{
+  "clientName": "Client Name",
+  "primaryColor": "#5a2f61",
+  "secondaryColor": "#4fa7db",
+  "accentColor": "#6f28db",
+  "neutralColor": "#767779",
+  "backgroundGradient": ["#5a2f61", "#4fa7db"],
+  "tone": "plain-language executive review",
+  "designNotes": [
+    "Large headline number per page or slide",
+    "Short explanation beneath each metric",
+    "Bold colour blocks and gradient backgrounds",
+    "Technical details moved to appendix sections"
+  ]
+}
