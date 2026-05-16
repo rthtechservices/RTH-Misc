@@ -79,11 +79,15 @@ function Get-LicenseInventory {
         $warnings += 'License price map path was not provided. Costs will be null.'
     }
 
-    $subscribedSkuCommand = Get-Command -Name Get-MgSubscribedSku -ErrorAction Stop
-    if ($subscribedSkuCommand.Parameters.ContainsKey('All')) {
-        $skus = @(Get-MgSubscribedSku -All -ErrorAction Stop)
+    if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+        $skus = @(Invoke-TenantReviewGraphRestRequest -Uri 'subscribedSkus' -All)
     } else {
-        $skus = @(Get-MgSubscribedSku -ErrorAction Stop)
+        $subscribedSkuCommand = Get-Command -Name Get-MgSubscribedSku -ErrorAction Stop
+        if ($subscribedSkuCommand.Parameters.ContainsKey('All')) {
+            $skus = @(Get-MgSubscribedSku -All -ErrorAction Stop)
+        } else {
+            $skus = @(Get-MgSubscribedSku -ErrorAction Stop)
+        }
     }
 
     $items = @()
@@ -177,9 +181,9 @@ function Get-LicenseInventory {
         }
     }
 
-    $totalPurchased = ($items | Measure-Object -Property purchasedUnits -Sum).Sum
-    $totalAssigned = ($items | Measure-Object -Property assignedUnits -Sum).Sum
-    $totalUnused = ($items | Measure-Object -Property unusedUnits -Sum).Sum
+    $totalPurchased = Get-TenantReviewPropertySum -Items $items -Property 'purchasedUnits' -Default 0
+    $totalAssigned = Get-TenantReviewPropertySum -Items $items -Property 'assignedUnits' -Default 0
+    $totalUnused = Get-TenantReviewPropertySum -Items $items -Property 'unusedUnits' -Default 0
     if ($null -eq $totalPurchased) { $totalPurchased = 0 }
     if ($null -eq $totalAssigned) { $totalAssigned = 0 }
     if ($null -eq $totalUnused) { $totalUnused = 0 }

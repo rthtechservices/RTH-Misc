@@ -1,6 +1,6 @@
 {
   "dataset": "UserInventory",
-  "generatedAt": "2026-05-15T13:08:14.3176163-07:00",
+  "generatedAt": "2026-05-15T20:42:48.6507855-07:00",
   "staleAfterDays": 90,
   "summary": {
     "totalUsers": 15,
@@ -14,7 +14,10 @@
     "licensedStaleUsers": 0,
     "licensedDisabledUsers": 0,
     "guestUsersWithLicenses": 0,
-    "usersWithoutSignInData": 15
+    "usersWithoutSignInData": 15,
+    "signInActivityRequested": false,
+    "signInActivityAvailable": false,
+    "signInActivityStatus": "NotRequested"
   },
   "items": [
     {
@@ -282,7 +285,5 @@
       "isLicensedAndStale": false
     }
   ],
-  "warnings": [
-    "Sign-in activity was unavailable. Retried user collection without signInActivity. [Authentication_RequestFromNonPremiumTenantOrB2CTenant] : Tenant is not a B2C tenant and doesn't have premium license"
-  ]
+  "warnings": []
 }

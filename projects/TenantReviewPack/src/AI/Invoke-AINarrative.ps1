@@ -5,7 +5,10 @@ function Invoke-AINarrative {
         [object]$Datasets,
 
         [Parameter(Mandatory = $false)]
-        [object]$Settings
+        [object]$Settings,
+
+        [Parameter(Mandatory = $false)]
+        [string]$RuntimeApiKey
     )
 
     function New-LocalNarrativeSection {
@@ -123,12 +126,9 @@ function Invoke-AINarrative {
 
     $endpoint = Get-TenantReviewProperty -InputObject $aiSettings -Name 'endpoint'
     $apiKeyVariable = Get-TenantReviewProperty -InputObject $aiSettings -Name 'apiKeyEnvironmentVariable'
-    $apiKey = if ($apiKeyVariable) { [Environment]::GetEnvironmentVariable($apiKeyVariable) } else { $null }
+    $apiKey = if ($RuntimeApiKey) { $RuntimeApiKey } elseif ($apiKeyVariable) { [Environment]::GetEnvironmentVariable($apiKeyVariable) } else { $null }
     if (-not $endpoint -or -not $apiKey) {
-        $narrative = New-LocalNarrative -Datasets $Datasets
-        $narrative.source = 'LocalRuleBased'
-        $narrative.warnings = @('AI narrative was enabled but endpoint or API key environment variable was missing. Used local deterministic narrative.')
-        return $narrative
+        throw 'AI narrative is enabled, but the endpoint or API key is missing. Provide a valid ai.endpoint and an API key via the configured environment variable or interactive prompt.'
     }
 
     $datasetSummaries = @()
@@ -148,16 +148,39 @@ $($datasetSummaries | ConvertTo-Json -Depth 8)
 "@
 
     try {
-        $body = @{
-            messages = @(
-                @{ role = 'system'; content = 'You produce strict JSON only for client-ready Microsoft 365 review summaries.' },
-                @{ role = 'user'; content = $prompt }
-            )
-            temperature = 0.2
-        } | ConvertTo-Json -Depth 12
+        $model = Get-TenantReviewProperty -InputObject $aiSettings -Name 'model'
+        if ($endpoint -match '/responses') {
+            $bodyObject = @{
+                model = $model
+                input = @(
+                    @{ role = 'system'; content = 'You produce strict JSON only for client-ready Microsoft 365 review summaries.' },
+                    @{ role = 'user'; content = $prompt }
+                )
+            }
+        } else {
+            $bodyObject = @{
+                messages = @(
+                    @{ role = 'system'; content = 'You produce strict JSON only for client-ready Microsoft 365 review summaries.' },
+                    @{ role = 'user'; content = $prompt }
+                )
+                temperature = 0.2
+            }
+            if ($model) {
+                $bodyObject.model = $model
+            }
+        }
 
+        $body = $bodyObject | ConvertTo-Json -Depth 12
         $response = Invoke-RestMethod -Method Post -Uri $endpoint -Headers @{ 'api-key' = $apiKey; 'Content-Type' = 'application/json' } -Body $body -ErrorAction Stop
-        $content = Get-TenantReviewProperty -InputObject (($response.choices | Select-Object -First 1).message) -Name 'content'
+        $content = Get-TenantReviewProperty -InputObject $response -Name 'output_text'
+        if (-not $content) {
+            $content = Get-TenantReviewProperty -InputObject (($response.choices | Select-Object -First 1).message) -Name 'content'
+        }
+        if (-not $content) {
+            $firstOutput = @($response.output) | Select-Object -First 1
+            $firstContent = @(Get-TenantReviewProperty -InputObject $firstOutput -Name 'content') | Select-Object -First 1
+            $content = Get-TenantReviewProperty -InputObject $firstContent -Name 'text'
+        }
         if (-not $content) {
             throw 'AI response did not include message content.'
         }
@@ -171,8 +194,6 @@ $($datasetSummaries | ConvertTo-Json -Depth 8)
             warnings    = @()
         }
     } catch {
-        $narrative = New-LocalNarrative -Datasets $Datasets
-        $narrative.warnings = @("AI narrative failed validation or request handling. Used local deterministic narrative. $($_.Exception.Message)")
-        return $narrative
+        throw "AI narrative failed. The script will not use local fallback because AI was enabled. $($_.Exception.Message)"
     }
 }

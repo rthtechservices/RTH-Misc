@@ -5,38 +5,54 @@ function Get-SharePointInventory {
 
         [int]$ReportPeriodDays = 90,
 
-        [switch]$IncludeOneDrive
+        [switch]$IncludeOneDrive,
+
+        [ValidateSet('Auto', 'PnP', 'SPO', 'GraphReports')]
+        [string]$SiteSource = 'Auto'
     )
 
     $warnings = @()
     $sites = @()
     $oneDriveItems = @()
     $rawReports = [ordered]@{}
+    $sharePointReportAvailable = $false
+    $sharePointReportStatus = 'NotRequested'
+    $oneDriveReportAvailable = $false
+    $oneDriveReportStatus = if ($IncludeOneDrive) { 'Requested' } else { 'NotRequested' }
 
-    $pnpCommand = Get-Command -Name Get-PnPTenantSite -ErrorAction SilentlyContinue
-    $spoCommand = Get-Command -Name Get-SPOSite -ErrorAction SilentlyContinue
-    if ($pnpCommand) {
-        try {
-            $sites = @(Get-PnPTenantSite -Detailed -ErrorAction Stop)
-        } catch {
-            $warnings += "PnP tenant site collection failed. $($_.Exception.Message)"
+    if ($SiteSource -ne 'GraphReports') {
+        $pnpCommand = Get-Command -Name Get-PnPTenantSite -ErrorAction SilentlyContinue
+        $spoCommand = Get-Command -Name Get-SPOSite -ErrorAction SilentlyContinue
+        if ($SiteSource -in @('Auto', 'PnP') -and $pnpCommand) {
+            try {
+                $sites = @(Get-PnPTenantSite -Detailed -ErrorAction Stop)
+            } catch {
+                $warnings += "PnP tenant site collection failed. $($_.Exception.Message)"
+            }
+        } elseif ($SiteSource -eq 'PnP') {
+            $warnings += 'PnP.PowerShell/Get-PnPTenantSite is unavailable.'
+        } elseif ($SiteSource -in @('Auto', 'SPO') -and $spoCommand) {
+            try {
+                $sites = @(Get-SPOSite -Limit All -ErrorAction Stop)
+            } catch {
+                $warnings += "SharePoint Online site collection failed. $($_.Exception.Message)"
+            }
+        } elseif ($SiteSource -eq 'SPO') {
+            $warnings += 'Microsoft.Online.SharePoint.PowerShell/Get-SPOSite is unavailable.'
         }
-    } elseif ($spoCommand) {
-        try {
-            $sites = @(Get-SPOSite -Limit All -ErrorAction Stop)
-        } catch {
-            $warnings += "SharePoint Online site collection failed. $($_.Exception.Message)"
-        }
-    } else {
-        $warnings += 'PnP.PowerShell/Get-PnPTenantSite and Microsoft.Online.SharePoint.PowerShell/Get-SPOSite are unavailable; using Graph reports if available.'
     }
 
     $usageReport = @()
     try {
         $usageReport = @(Invoke-TenantReviewGraphCsvReport -CommandName 'Get-MgReportSharePointSiteUsageDetail' -ReportPeriodDays $ReportPeriodDays)
         $rawReports['sharePointSiteUsageDetail'] = @($usageReport)
+        $sharePointReportAvailable = $true
+        $sharePointReportStatus = 'Collected'
     } catch {
-        $warnings += "SharePoint Graph usage report unavailable. $($_.Exception.Message)"
+        $sharePointReportStatus = "Unavailable: $($_.Exception.Message)"
+        if ($SiteSource -eq 'GraphReports') {
+            $warnings += "SharePoint Graph usage report unavailable. $($_.Exception.Message)"
+        }
     }
 
     $usageByUrl = @{}
@@ -95,6 +111,8 @@ function Get-SharePointInventory {
         try {
             $oneDriveReport = @(Invoke-TenantReviewGraphCsvReport -CommandName 'Get-MgReportOneDriveUsageAccountDetail' -ReportPeriodDays $ReportPeriodDays)
             $rawReports['oneDriveUsageAccountDetail'] = @($oneDriveReport)
+            $oneDriveReportAvailable = $true
+            $oneDriveReportStatus = 'Collected'
             foreach ($row in $oneDriveReport) {
                 $oneDriveItems += [pscustomobject]@{
                     ownerPrincipalName = Get-TenantReviewProperty -InputObject $row -Name 'Owner Principal Name'
@@ -107,15 +125,16 @@ function Get-SharePointInventory {
                 }
             }
         } catch {
-            $warnings += "OneDrive Graph usage report unavailable. $($_.Exception.Message)"
+            $oneDriveReportStatus = "Unavailable: $($_.Exception.Message)"
+            $warnings += "OneDrive Graph usage report was requested but unavailable. $($_.Exception.Message)"
         }
     }
 
     $largestSite = $items | Sort-Object -Property storageUsageGB -Descending | Select-Object -First 1
-    $totalStorage = ($items | Where-Object { $null -ne $_.storageUsageGB } | Measure-Object -Property storageUsageGB -Sum).Sum
-    $totalStorageQuota = ($items | Where-Object { $null -ne $_.storageQuotaGB } | Measure-Object -Property storageQuotaGB -Sum).Sum
-    $oneDriveStorage = ($oneDriveItems | Where-Object { $null -ne $_.storageUsedGB } | Measure-Object -Property storageUsedGB -Sum).Sum
-    $oneDriveActiveFiles = ($oneDriveItems | Where-Object { $null -ne $_.activeFileCount } | Measure-Object -Property activeFileCount -Sum).Sum
+    $totalStorage = Get-TenantReviewPropertySum -Items $items -Property 'storageUsageGB'
+    $totalStorageQuota = Get-TenantReviewPropertySum -Items $items -Property 'storageQuotaGB'
+    $oneDriveStorage = Get-TenantReviewPropertySum -Items $oneDriveItems -Property 'storageUsedGB'
+    $oneDriveActiveFiles = Get-TenantReviewPropertySum -Items $oneDriveItems -Property 'activeFileCount'
 
     $result = [ordered]@{
         dataset       = 'SharePointInventory'
@@ -132,6 +151,12 @@ function Get-SharePointInventory {
             oneDriveTotalStorageGB      = if ($null -ne $oneDriveStorage) { [decimal]::Round([decimal]$oneDriveStorage, 2) } else { $null }
             oneDriveActiveFiles         = if ($null -ne $oneDriveActiveFiles) { [int]$oneDriveActiveFiles } else { $null }
             reportPeriod                = "D$ReportPeriodDays"
+            siteSource                  = $SiteSource
+            sharePointReportAvailable   = $sharePointReportAvailable
+            sharePointReportStatus      = $sharePointReportStatus
+            oneDriveReportRequested     = [bool]$IncludeOneDrive
+            oneDriveReportAvailable     = $oneDriveReportAvailable
+            oneDriveReportStatus        = $oneDriveReportStatus
         }
         items         = @($items)
         oneDriveItems = @($oneDriveItems)

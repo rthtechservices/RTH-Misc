@@ -6,6 +6,8 @@ function Get-UserInventory {
 
         [switch]$IncludeGuests,
 
+        [switch]$IncludeSignInActivity,
+
         [switch]$IncludeRaw
     )
 
@@ -23,9 +25,6 @@ function Get-UserInventory {
         }
 
         if ($InputObject -is [System.Collections.IDictionary]) {
-            if ($InputObject.Contains($Name)) {
-                return $InputObject[$Name]
-            }
             foreach ($key in $InputObject.Keys) {
                 if ($key.ToString().Equals($Name, [System.StringComparison]::OrdinalIgnoreCase)) {
                     return $InputObject[$key]
@@ -41,9 +40,6 @@ function Get-UserInventory {
         $additionalProperties = $InputObject.PSObject.Properties['AdditionalProperties']
         if ($null -ne $additionalProperties -and $additionalProperties.Value -is [System.Collections.IDictionary]) {
             $additional = $additionalProperties.Value
-            if ($additional.Contains($Name)) {
-                return $additional[$Name]
-            }
             foreach ($key in $additional.Keys) {
                 if ($key.ToString().Equals($Name, [System.StringComparison]::OrdinalIgnoreCase)) {
                     return $additional[$key]
@@ -122,13 +118,31 @@ function Get-UserInventory {
         'CompanyName'
     )
 
-    $signInActivityAvailable = $true
-    try {
-        $users = @(Get-MgUser -All -Property $propertiesWithSignIn -ErrorAction Stop)
-    } catch {
-        $signInActivityAvailable = $false
-        $warnings += "Sign-in activity was unavailable. Retried user collection without signInActivity. $($_.Exception.Message)"
-        $users = @(Get-MgUser -All -Property $propertiesWithoutSignIn -ErrorAction Stop)
+    $signInActivityAvailable = $false
+    $signInActivityStatus = if ($IncludeSignInActivity) { 'Requested' } else { 'NotRequested' }
+    if ($IncludeSignInActivity) {
+        try {
+            if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+                $select = ($propertiesWithSignIn | ForEach-Object { $_.Substring(0, 1).ToLowerInvariant() + $_.Substring(1) }) -join ','
+                $users = @(Invoke-TenantReviewGraphRestRequest -Uri "users?`$select=$select" -All)
+            } else {
+                $users = @(Get-MgUser -All -Property $propertiesWithSignIn -ErrorAction Stop)
+            }
+            $signInActivityAvailable = $true
+            $signInActivityStatus = 'Collected'
+        } catch {
+            $signInActivityStatus = "Unavailable: $($_.Exception.Message)"
+            $warnings += "Sign-in activity was requested but unavailable. $($_.Exception.Message)"
+        }
+    }
+
+    if (-not $signInActivityAvailable) {
+        if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+            $select = ($propertiesWithoutSignIn | ForEach-Object { $_.Substring(0, 1).ToLowerInvariant() + $_.Substring(1) }) -join ','
+            $users = @(Invoke-TenantReviewGraphRestRequest -Uri "users?`$select=$select" -All)
+        } else {
+            $users = @(Get-MgUser -All -Property $propertiesWithoutSignIn -ErrorAction Stop)
+        }
     }
 
     $items = @()
@@ -256,6 +270,9 @@ function Get-UserInventory {
             licensedDisabledUsers      = $summaryLicensedDisabledUsers
             guestUsersWithLicenses     = $summaryGuestUsersWithLicenses
             usersWithoutSignInData     = $summaryUsersWithoutSignInData
+            signInActivityRequested     = [bool]$IncludeSignInActivity
+            signInActivityAvailable    = $signInActivityAvailable
+            signInActivityStatus       = $signInActivityStatus
         }
         items          = @($items)
         warnings       = @($warnings)

@@ -16,7 +16,13 @@ function Get-TenantOverview {
     $organizations = @()
     $domains = @()
 
-    if (Get-Command -Name Get-MgOrganization -ErrorAction SilentlyContinue) {
+    if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+        try {
+            $organizations = @(Invoke-TenantReviewGraphRestRequest -Uri 'organization?$select=id,displayName,passwordValidityPeriodInDays,technicalNotificationMails,assignedPlans,createdDateTime' -All)
+        } catch {
+            $warnings += "Unable to collect organization details from Microsoft Graph REST. $($_.Exception.Message)"
+        }
+    } elseif (Get-Command -Name Get-MgOrganization -ErrorAction SilentlyContinue) {
         try {
             $organizations = @(Get-MgOrganization -ErrorAction Stop)
         } catch {
@@ -26,7 +32,13 @@ function Get-TenantOverview {
         $warnings += 'Get-MgOrganization is not available. Install Microsoft.Graph.Identity.DirectoryManagement for tenant overview details.'
     }
 
-    if (Get-Command -Name Get-MgDomain -ErrorAction SilentlyContinue) {
+    if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+        try {
+            $domains = @(Invoke-TenantReviewGraphRestRequest -Uri 'domains' -All)
+        } catch {
+            $warnings += "Unable to collect domain details from Microsoft Graph REST. $($_.Exception.Message)"
+        }
+    } elseif (Get-Command -Name Get-MgDomain -ErrorAction SilentlyContinue) {
         try {
             $domains = @(Get-MgDomain -All -ErrorAction Stop)
         } catch {

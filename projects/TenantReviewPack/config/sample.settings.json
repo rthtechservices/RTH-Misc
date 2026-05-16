@@ -16,11 +16,15 @@
     "priceMapPath": "config/license-prices.sample.json",
     "defaultCurrency": "CAD"
   },
+  "users": {
+    "includeSignInActivity": true
+  },
   "sharePoint": {
     "adminUrl": "https://contoso-admin.sharepoint.com",
     "enabled": true,
     "includeOneDrive": true,
-    "reportPeriodDays": 90
+    "reportPeriodDays": 90,
+    "siteSource": "Auto"
   },
   "teams": {
     "reportPeriodDays": 90,
@@ -29,6 +33,9 @@
   "devices": {
     "staleAfterDays": 90,
     "includeIntune": true
+  },
+  "copilot": {
+    "includeUsageReport": true
   },
   "ai": {
     "enabled": false,

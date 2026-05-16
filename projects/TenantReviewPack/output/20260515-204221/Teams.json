@@ -1,0 +1,63 @@
+{
+  "dataset": "TeamsInventory",
+  "generatedAt": "2026-05-15T20:43:09.0374930-07:00",
+  "summary": {
+    "totalTeams": 3,
+    "activeTeams": 0,
+    "inactiveTeams": 2,
+    "publicTeams": 0,
+    "privateTeams": 3,
+    "archivedTeams": 0,
+    "teamsWithNoOwners": 0,
+    "teamsWithFewMembers": 0,
+    "totalChannelMessages": 0,
+    "totalMeetings": 0,
+    "activeTeamsReportPeriod": "D90",
+    "ownerMemberCountsIncluded": false
+  },
+  "items": [
+    {
+      "teamId": "af9fb290-16cb-4b37-addd-eb35ff2fd00f",
+      "displayName": "General RTH Tech",
+      "visibility": "Private",
+      "createdDateTime": "2021-02-17T12:08:18Z",
+      "isArchived": false,
+      "ownerCount": null,
+      "memberCount": null,
+      "lastActivityDate": "2025-11-11",
+      "channelMessages": 0,
+      "replyMessages": 0,
+      "meetingsOrganized": 0,
+      "inactive": true
+    },
+    {
+      "teamId": "d2994ec5-82eb-4ed9-8dba-5174266e589f",
+      "displayName": "HGLLP",
+      "visibility": "Private",
+      "createdDateTime": "2021-03-11T07:07:44Z",
+      "isArchived": false,
+      "ownerCount": null,
+      "memberCount": null,
+      "lastActivityDate": "2025-03-31",
+      "channelMessages": 0,
+      "replyMessages": 0,
+      "meetingsOrganized": 0,
+      "inactive": true
+    },
+    {
+      "teamId": "55a76372-3244-43e2-93b4-4d9b20cf4310",
+      "displayName": "RBS LLP",
+      "visibility": "Private",
+      "createdDateTime": "2023-03-27T02:47:06Z",
+      "isArchived": false,
+      "ownerCount": null,
+      "memberCount": null,
+      "lastActivityDate": null,
+      "channelMessages": 0,
+      "replyMessages": 0,
+      "meetingsOrganized": 0,
+      "inactive": null
+    }
+  ],
+  "warnings": []
+}

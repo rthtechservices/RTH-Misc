@@ -14,7 +14,13 @@ function Get-TeamsInventory {
     $raw = [ordered]@{}
 
     $groupCommand = Get-Command -Name Get-MgGroup -ErrorAction SilentlyContinue
-    if ($groupCommand) {
+    if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+        try {
+            $teamGroups = @(Invoke-TenantReviewGraphRestRequest -Uri "groups?`$filter=resourceProvisioningOptions/Any(x:x eq 'Team')&`$select=id,displayName,visibility,createdDateTime,resourceProvisioningOptions" -All)
+        } catch {
+            $warnings += "Unable to collect Microsoft 365 groups with Teams via Graph REST. $($_.Exception.Message)"
+        }
+    } elseif ($groupCommand) {
         try {
             $teamGroups = @(Get-MgGroup -All -Filter "resourceProvisioningOptions/Any(x:x eq 'Team')" -Property @('Id', 'DisplayName', 'Visibility', 'CreatedDateTime', 'ResourceProvisioningOptions') -ErrorAction Stop)
         } catch {
@@ -67,14 +73,26 @@ function Get-TeamsInventory {
         $ownerCount = $null
         $memberCount = $null
         if ($IncludeOwnersAndMembers) {
-            if (Get-Command -Name Get-MgGroupOwner -ErrorAction SilentlyContinue) {
+            if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+                try {
+                    $ownerCount = @(Invoke-TenantReviewGraphRestRequest -Uri "groups/$groupId/owners?`$select=id" -All).Count
+                } catch {
+                    $warnings += "Unable to expand owners for team '$displayName'. $($_.Exception.Message)"
+                }
+            } elseif (Get-Command -Name Get-MgGroupOwner -ErrorAction SilentlyContinue) {
                 try {
                     $ownerCount = @(Get-MgGroupOwner -GroupId $groupId -All -ErrorAction Stop).Count
                 } catch {
                     $warnings += "Unable to expand owners for team '$displayName'. $($_.Exception.Message)"
                 }
             }
-            if (Get-Command -Name Get-MgGroupMember -ErrorAction SilentlyContinue) {
+            if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+                try {
+                    $memberCount = @(Invoke-TenantReviewGraphRestRequest -Uri "groups/$groupId/members?`$select=id" -All).Count
+                } catch {
+                    $warnings += "Unable to expand members for team '$displayName'. $($_.Exception.Message)"
+                }
+            } elseif (Get-Command -Name Get-MgGroupMember -ErrorAction SilentlyContinue) {
                 try {
                     $memberCount = @(Get-MgGroupMember -GroupId $groupId -All -ErrorAction Stop).Count
                 } catch {
@@ -84,7 +102,15 @@ function Get-TeamsInventory {
         }
 
         $isArchived = $null
-        if ((Get-Command -Name Get-MgTeam -ErrorAction SilentlyContinue) -and $groupId) {
+        if ((Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) -and $groupId) {
+            try {
+                $team = Invoke-TenantReviewGraphRestRequest -Uri "teams/$groupId" -Raw
+                $isArchived = Get-TenantReviewProperty -InputObject $team -Name 'IsArchived'
+                if ($null -eq $isArchived) { $isArchived = Get-TenantReviewProperty -InputObject $team -Name 'isArchived' }
+            } catch {
+                $warnings += "Unable to collect team settings for '$displayName'. $($_.Exception.Message)"
+            }
+        } elseif ((Get-Command -Name Get-MgTeam -ErrorAction SilentlyContinue) -and $groupId) {
             try {
                 $team = Get-MgTeam -TeamId $groupId -ErrorAction Stop
                 $isArchived = Get-TenantReviewProperty -InputObject $team -Name 'IsArchived'
@@ -112,12 +138,8 @@ function Get-TeamsInventory {
         }
     }
 
-    if (-not $IncludeOwnersAndMembers) {
-        $warnings += 'Owner/member expansion skipped. Use -IncludeOwnersAndMembers to collect counts; this may add Graph calls per team.'
-    }
-
-    $totalChannelMessages = ($items | Measure-Object -Property channelMessages -Sum).Sum
-    $totalMeetings = ($items | Measure-Object -Property meetingsOrganized -Sum).Sum
+    $totalChannelMessages = Get-TenantReviewPropertySum -Items $items -Property 'channelMessages'
+    $totalMeetings = Get-TenantReviewPropertySum -Items $items -Property 'meetingsOrganized'
     $result = [ordered]@{
         dataset     = 'TeamsInventory'
         generatedAt = (Get-Date).ToString('o')
@@ -133,6 +155,7 @@ function Get-TeamsInventory {
             totalChannelMessages    = if ($null -ne $totalChannelMessages) { [int]$totalChannelMessages } else { $null }
             totalMeetings           = if ($null -ne $totalMeetings) { [int]$totalMeetings } else { $null }
             activeTeamsReportPeriod = "D$ReportPeriodDays"
+            ownerMemberCountsIncluded = [bool]$IncludeOwnersAndMembers
         }
         items       = @($items)
         warnings    = @($warnings)

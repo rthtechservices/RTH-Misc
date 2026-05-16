@@ -1,6 +1,6 @@
 {
   "dataset": "LicenseUserAnalysis",
-  "generatedAt": "2026-05-15T13:08:14.3191743-07:00",
+  "generatedAt": "2026-05-15T20:42:48.6907835-07:00",
   "summary": {
     "unusedLicenseCount": 1049993,
     "estimatedUnusedMonthlyCost": 0.0,
@@ -21,5 +21,6 @@
   ],
   "disabledLicensedUsers": [],
   "staleLicensedUsers": [],
-  "guestLicensedUsers": []
+  "guestLicensedUsers": [],
+  "warnings": []
 }

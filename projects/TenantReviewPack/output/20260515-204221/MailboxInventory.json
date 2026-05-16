@@ -1,0 +1,455 @@
+{
+  "dataset": "MailboxInventory",
+  "generatedAt": "2026-05-15T20:43:05.6102463-07:00",
+  "summary": {
+    "totalMailboxes": 9,
+    "userMailboxes": 1,
+    "sharedMailboxes": 4,
+    "roomMailboxes": 1,
+    "equipmentMailboxes": 0,
+    "mailboxesWithForwarding": 2,
+    "mailboxesForwardingExternally": 0,
+    "transportRules": 6,
+    "enabledTransportRules": 6,
+    "inboxRulesScanned": 9,
+    "inboxForwardingRulesFound": 17,
+    "inboxRuleScanIncluded": true,
+    "mailboxStatisticsIncluded": true,
+    "totalMailboxSizeGB": 186719055.74,
+    "largestMailboxes": [
+      {
+        "displayName": "Escala",
+        "primarySmtpAddress": "escala@rthtechservices.com",
+        "recipientTypeDetails": "SharedMailbox",
+        "isShared": true,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 186719050.60,
+        "itemCount": 845
+      },
+      {
+        "displayName": "Rohan Hare",
+        "primarySmtpAddress": "rohan@rthtechservices.com",
+        "recipientTypeDetails": "UserMailbox",
+        "isShared": false,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": true,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 4.18,
+        "itemCount": 24365
+      },
+      {
+        "displayName": "RBS",
+        "primarySmtpAddress": "RBS@rthtechservices.com",
+        "recipientTypeDetails": "SharedMailbox",
+        "isShared": true,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.53,
+        "itemCount": 2161
+      },
+      {
+        "displayName": "HGLLP",
+        "primarySmtpAddress": "harpergrey@rthtechservices.com",
+        "recipientTypeDetails": "SharedMailbox",
+        "isShared": true,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.41,
+        "itemCount": 1186
+      },
+      {
+        "displayName": "RTH Tech Services - Info",
+        "primarySmtpAddress": "info@rthtechservices.com",
+        "recipientTypeDetails": "SharedMailbox",
+        "isShared": true,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.02,
+        "itemCount": 192
+      },
+      {
+        "displayName": "Discovery Search Mailbox",
+        "primarySmtpAddress": "DiscoverySearchMailbox{D919BA05-46A6-415f-80AD-7E09334BB852}@rthtechservices.onmicrosoft.com",
+        "recipientTypeDetails": "DiscoveryMailbox",
+        "isShared": false,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.00,
+        "itemCount": 2
+      },
+      {
+        "displayName": "Make a Booking with RTH Tech Services Inc.",
+        "primarySmtpAddress": "MakeaBookingwithRTHTechServicesInc@rthtechservices.com",
+        "recipientTypeDetails": "SchedulingMailbox",
+        "isShared": false,
+        "forwardingEnabled": true,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": "smtp:rohan@rthtechservices.com",
+        "deliverToMailboxAndForward": true,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.00,
+        "itemCount": 10
+      },
+      {
+        "displayName": "Office Conference Room",
+        "primarySmtpAddress": "OfficeConferenceRoom@rthtechservices.com",
+        "recipientTypeDetails": "RoomMailbox",
+        "isShared": false,
+        "forwardingEnabled": false,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": null,
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.00,
+        "itemCount": 16
+      },
+      {
+        "displayName": "RTH Tech Services Inc.",
+        "primarySmtpAddress": "RTHTechServicesInc1@rthtechservices.com",
+        "recipientTypeDetails": "SchedulingMailbox",
+        "isShared": false,
+        "forwardingEnabled": true,
+        "forwardingAddress": null,
+        "forwardingSmtpAddress": "smtp:rohan@rthtechservices.com",
+        "deliverToMailboxAndForward": false,
+        "externalForwardingSuspected": false,
+        "totalItemSizeGB": 0.00,
+        "itemCount": 14
+      }
+    ]
+  },
+  "items": [
+    {
+      "displayName": "Discovery Search Mailbox",
+      "primarySmtpAddress": "DiscoverySearchMailbox{D919BA05-46A6-415f-80AD-7E09334BB852}@rthtechservices.onmicrosoft.com",
+      "recipientTypeDetails": "DiscoveryMailbox",
+      "isShared": false,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.00,
+      "itemCount": 2
+    },
+    {
+      "displayName": "Escala",
+      "primarySmtpAddress": "escala@rthtechservices.com",
+      "recipientTypeDetails": "SharedMailbox",
+      "isShared": true,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 186719050.60,
+      "itemCount": 845
+    },
+    {
+      "displayName": "HGLLP",
+      "primarySmtpAddress": "harpergrey@rthtechservices.com",
+      "recipientTypeDetails": "SharedMailbox",
+      "isShared": true,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.41,
+      "itemCount": 1186
+    },
+    {
+      "displayName": "Make a Booking with RTH Tech Services Inc.",
+      "primarySmtpAddress": "MakeaBookingwithRTHTechServicesInc@rthtechservices.com",
+      "recipientTypeDetails": "SchedulingMailbox",
+      "isShared": false,
+      "forwardingEnabled": true,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": "smtp:rohan@rthtechservices.com",
+      "deliverToMailboxAndForward": true,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.00,
+      "itemCount": 10
+    },
+    {
+      "displayName": "Office Conference Room",
+      "primarySmtpAddress": "OfficeConferenceRoom@rthtechservices.com",
+      "recipientTypeDetails": "RoomMailbox",
+      "isShared": false,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.00,
+      "itemCount": 16
+    },
+    {
+      "displayName": "RBS",
+      "primarySmtpAddress": "RBS@rthtechservices.com",
+      "recipientTypeDetails": "SharedMailbox",
+      "isShared": true,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.53,
+      "itemCount": 2161
+    },
+    {
+      "displayName": "Rohan Hare",
+      "primarySmtpAddress": "rohan@rthtechservices.com",
+      "recipientTypeDetails": "UserMailbox",
+      "isShared": false,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": true,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 4.18,
+      "itemCount": 24365
+    },
+    {
+      "displayName": "RTH Tech Services - Info",
+      "primarySmtpAddress": "info@rthtechservices.com",
+      "recipientTypeDetails": "SharedMailbox",
+      "isShared": true,
+      "forwardingEnabled": false,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": null,
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.02,
+      "itemCount": 192
+    },
+    {
+      "displayName": "RTH Tech Services Inc.",
+      "primarySmtpAddress": "RTHTechServicesInc1@rthtechservices.com",
+      "recipientTypeDetails": "SchedulingMailbox",
+      "isShared": false,
+      "forwardingEnabled": true,
+      "forwardingAddress": null,
+      "forwardingSmtpAddress": "smtp:rohan@rthtechservices.com",
+      "deliverToMailboxAndForward": false,
+      "externalForwardingSuspected": false,
+      "totalItemSizeGB": 0.00,
+      "itemCount": 14
+    }
+  ],
+  "transportRules": [
+    {
+      "name": "Incoming HGLLP",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 0,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.SenderDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    },
+    {
+      "name": "Incoming RBS",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 1,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.SenderDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    },
+    {
+      "name": "Incoming Escala",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 2,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.SenderDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    },
+    {
+      "name": "Outgoing HG LLP",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 3,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.RecipientDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    },
+    {
+      "name": "Outgoing RBS",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 4,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.RecipientDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    },
+    {
+      "name": "Outgoing Escala",
+      "state": "Enabled",
+      "mode": "Enforce",
+      "priority": 5,
+      "comments": null,
+      "conditionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.RecipientDomainIsPredicate",
+      "actionsSummary": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.BlindCopyToAction"
+    }
+  ],
+  "inboxForwardingRules": [
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "a",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [
+        "\"RTH Tech Services - Info\" [EX:/o=ExchangeLabs/ou=Exchange Administrative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=535485041e144d45b4aff8e0c5f9c6bb-RTH Tech Se]"
+      ],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - Farris",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "MOVE - COPILOT GITHUB EMAILS",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "For all messages from Office 365 Activity Alert",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - PWX",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "HGLLP - Invoice Time Tracking",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "RBS - Invoice Time Tracking",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - Escala Invoice Time Tracking",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - HGLLP",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - RBS",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - HAREMECHANICAL",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - MICROSOFT INVOICES",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "RBS SENT",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "HGLLP SENT",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "POWEREX SENT",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "CAT - ESCALA",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    },
+    {
+      "mailbox": "rohan@rthtechservices.com",
+      "name": "Microsoft 365 Message center",
+      "enabled": true,
+      "forwardTo": [],
+      "redirectTo": [],
+      "forwardAsAttachmentTo": []
+    }
+  ],
+  "warnings": []
+}

@@ -12,9 +12,18 @@ function Get-DeviceInventory {
     $devices = @()
     $managedDevices = @()
     $managedByAzureDeviceId = @{}
+    $devicesWithoutLastSignIn = 0
+    $intuneCollectionAvailable = $false
+    $intuneCollectionStatus = if ($IncludeIntune) { 'Requested' } else { 'NotRequested' }
     $staleCutoff = (Get-Date).AddDays(-1 * $StaleAfterDays)
 
-    if (Get-Command -Name Get-MgDevice -ErrorAction SilentlyContinue) {
+    if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+        try {
+            $devices = @(Invoke-TenantReviewGraphRestRequest -Uri 'devices?$select=id,deviceId,displayName,accountEnabled,operatingSystem,operatingSystemVersion,trustType,approximateLastSignInDateTime' -All)
+        } catch {
+            $warnings += "Unable to collect Entra devices from Microsoft Graph REST. $($_.Exception.Message)"
+        }
+    } elseif (Get-Command -Name Get-MgDevice -ErrorAction SilentlyContinue) {
         try {
             $devices = @(Get-MgDevice -All -Property @('Id', 'DeviceId', 'DisplayName', 'AccountEnabled', 'OperatingSystem', 'OperatingSystemVersion', 'TrustType', 'ApproximateLastSignInDateTime') -ErrorAction Stop)
         } catch {
@@ -25,9 +34,28 @@ function Get-DeviceInventory {
     }
 
     if ($IncludeIntune) {
-        if (Get-Command -Name Get-MgDeviceManagementManagedDevice -ErrorAction SilentlyContinue) {
+        if (Get-Command -Name Invoke-TenantReviewGraphRestRequest -ErrorAction SilentlyContinue) {
+            try {
+                $managedDevices = @(Invoke-TenantReviewGraphRestRequest -Uri 'deviceManagement/managedDevices' -All)
+                $intuneCollectionAvailable = $true
+                $intuneCollectionStatus = 'Collected'
+                foreach ($managedDevice in $managedDevices) {
+                    $azureDeviceId = Get-TenantReviewProperty -InputObject $managedDevice -Name 'AzureAdDeviceId'
+                    if (-not $azureDeviceId) { $azureDeviceId = Get-TenantReviewProperty -InputObject $managedDevice -Name 'AzureADDeviceId' }
+                    if (-not $azureDeviceId) { $azureDeviceId = Get-TenantReviewProperty -InputObject $managedDevice -Name 'azureADDeviceId' }
+                    if ($azureDeviceId) {
+                        $managedByAzureDeviceId[$azureDeviceId.ToString()] = $managedDevice
+                    }
+                }
+            } catch {
+                $intuneCollectionStatus = "Unavailable: $($_.Exception.Message)"
+                $warnings += "Intune managed device collection was requested but unavailable via Graph REST. $($_.Exception.Message)"
+            }
+        } elseif (Get-Command -Name Get-MgDeviceManagementManagedDevice -ErrorAction SilentlyContinue) {
             try {
                 $managedDevices = @(Get-MgDeviceManagementManagedDevice -All -ErrorAction Stop)
+                $intuneCollectionAvailable = $true
+                $intuneCollectionStatus = 'Collected'
                 foreach ($managedDevice in $managedDevices) {
                     $azureDeviceId = Get-TenantReviewProperty -InputObject $managedDevice -Name 'AzureAdDeviceId'
                     if (-not $azureDeviceId) { $azureDeviceId = Get-TenantReviewProperty -InputObject $managedDevice -Name 'AzureADDeviceId' }
@@ -36,10 +64,12 @@ function Get-DeviceInventory {
                     }
                 }
             } catch {
-                $warnings += "Intune managed device collection unavailable. $($_.Exception.Message)"
+                $intuneCollectionStatus = "Unavailable: $($_.Exception.Message)"
+                $warnings += "Intune managed device collection was requested but unavailable. $($_.Exception.Message)"
             }
         } else {
-            $warnings += 'Get-MgDeviceManagementManagedDevice is not available. Install/import Microsoft.Graph.DeviceManagement for Intune managed device inventory.'
+            $intuneCollectionStatus = 'Unavailable: Get-MgDeviceManagementManagedDevice is not available.'
+            $warnings += 'Intune managed device collection was requested but Get-MgDeviceManagementManagedDevice is not available.'
         }
     }
 
@@ -54,7 +84,7 @@ function Get-DeviceInventory {
             $daysSinceLastSignIn = [int]([datetime]::UtcNow - $lastSignIn.ToUniversalTime()).TotalDays
             $isStale = $lastSignIn -lt $staleCutoff
         } else {
-            $warnings += 'One or more devices did not include approximateLastSignInDateTime.'
+            $devicesWithoutLastSignIn++
         }
 
         $items += [pscustomobject]@{
@@ -88,9 +118,13 @@ function Get-DeviceInventory {
             iosDevices                      = @($items | Where-Object { $_.operatingSystem -match 'iOS|iPad' }).Count
             androidDevices                  = @($items | Where-Object { $_.operatingSystem -match 'Android' }).Count
             intuneManagedDevices            = @($items | Where-Object { $_.isManaged }).Count
+            intuneCollectionRequested       = [bool]$IncludeIntune
+            intuneCollectionAvailable       = $intuneCollectionAvailable
+            intuneCollectionStatus          = $intuneCollectionStatus
             compliantDevices                = @($items | Where-Object { $_.complianceState -eq 'compliant' }).Count
             nonCompliantDevices             = @($items | Where-Object { $_.complianceState -eq 'noncompliant' }).Count
             unknownComplianceDevices        = @($items | Where-Object { -not $_.complianceState -or $_.complianceState -eq 'unknown' }).Count
+            devicesWithoutLastSignIn        = $devicesWithoutLastSignIn
         }
         items          = @($items)
         warnings       = @($uniqueWarnings)

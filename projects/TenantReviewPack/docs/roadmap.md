@@ -3,10 +3,10 @@
 ## Completed Foundation
 
 - App certificate and interactive Graph auth
-- Optional Exchange and SharePoint connection attempts with warnings
+- Exchange and SharePoint connection checks that prompt or fail on warnings
 - Stable JSON dataset shape across collectors
 - Local price-map based license costing
-- Local deterministic narrative fallback
+- Local deterministic narrative only when AI is explicitly disabled or skipped
 - Markdown/HTML report output
 - Deck outline output
 - Offline validation script

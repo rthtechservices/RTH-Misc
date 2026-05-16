@@ -1,0 +1,41 @@
+{
+  "dataset": "CopilotInventory",
+  "generatedAt": "2026-05-15T20:43:09.4313908-07:00",
+  "summary": {
+    "copilotSkus": 1,
+    "copilotPurchased": 1,
+    "copilotAssigned": 1,
+    "copilotUnused": 0,
+    "activeCopilotUsers": null,
+    "inactiveCopilotLicensedUsers": 0,
+    "usageReportRequested": false,
+    "usageReportAvailable": false,
+    "usageReportStatus": "NotRequested",
+    "estimatedMonthlyCost": 40.0,
+    "estimatedUnusedMonthlyCost": 0.0
+  },
+  "items": [
+    {
+      "skuId": "639dec6b-bb19-468b-871c-c5c441c4b0cb",
+      "skuPartNumber": "Microsoft_365_Copilot",
+      "displayName": "Microsoft 365 Copilot",
+      "purchasedUnits": 1,
+      "assignedUnits": 1,
+      "unusedUnits": 0,
+      "estimatedMonthlyCost": 40.0,
+      "estimatedUnusedMonthlyCost": 0.0
+    }
+  ],
+  "licensedUsers": [
+    {
+      "userPrincipalName": "rohan@rthtechservices.com",
+      "displayName": "Rohan Hare",
+      "assignedCopilotSkuPartNumbers": [
+        "Microsoft_365_Copilot"
+      ],
+      "isStale": false,
+      "lastSuccessfulSignInDateTime": null
+    }
+  ],
+  "warnings": []
+}

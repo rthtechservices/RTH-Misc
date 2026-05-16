@@ -1,0 +1,80 @@
+{
+  "dataset": "TenantOverview",
+  "tenantName": "rthtechservices",
+  "reviewPeriod": "2026",
+  "generatedAt": "2026-05-15T20:42:48.1654078-07:00",
+  "summary": {
+    "organizationName": "RTH Tech Services Inc.",
+    "tenantIdPresent": true,
+    "defaultDomain": "rthtechservices.com",
+    "initialDomain": "rthtechservices.onmicrosoft.com",
+    "domainCount": 5,
+    "verifiedDomainCount": 5,
+    "federatedDomainCount": 0,
+    "passwordValidityPeriodInDays": null,
+    "technicalNotificationMails": [
+      "rohan@rthtechservices.com"
+    ],
+    "assignedPlansCount": 69,
+    "createdDateTime": "2021-01-27T17:32:40Z",
+    "generatedAt": "2026-05-15T20:42:48.1657600-07:00"
+  },
+  "items": [
+    {
+      "id": "rthtechservices.onmicrosoft.com",
+      "isDefault": false,
+      "isInitial": true,
+      "isVerified": true,
+      "authenticationType": "Managed",
+      "supportedServices": [
+        "Email",
+        "OfficeCommunicationsOnline"
+      ]
+    },
+    {
+      "id": "rthtechservices.com",
+      "isDefault": true,
+      "isInitial": false,
+      "isVerified": true,
+      "authenticationType": "Managed",
+      "supportedServices": [
+        "Email",
+        "OfficeCommunicationsOnline",
+        "Intune"
+      ]
+    },
+    {
+      "id": "rthtechservices.ca",
+      "isDefault": false,
+      "isInitial": false,
+      "isVerified": true,
+      "authenticationType": "Managed",
+      "supportedServices": [
+        "Email",
+        "OfficeCommunicationsOnline",
+        "Intune"
+      ]
+    },
+    {
+      "id": "rohanhare.ca",
+      "isDefault": false,
+      "isInitial": false,
+      "isVerified": true,
+      "authenticationType": "Managed",
+      "supportedServices": [
+        "Email"
+      ]
+    },
+    {
+      "id": "rohanhare.com",
+      "isDefault": false,
+      "isInitial": false,
+      "isVerified": true,
+      "authenticationType": "Managed",
+      "supportedServices": [
+        "Email"
+      ]
+    }
+  ],
+  "warnings": []
+}

@@ -44,16 +44,18 @@ For Exchange app-only PowerShell:
 - Admin consent granted
 - Supported role assignment for the app service principal, commonly `Exchange Administrator` for broad review access or a narrower supported Exchange role where sufficient
 
-If this is not configured, the Exchange connection warning is expected and mailbox inventory returns limited/no Exchange data.
+If this is not configured, interactive runs prompt for a retry/continue/abort decision. Non-interactive runs fail on the warning.
 
 ## SharePoint
 
 The SharePoint collector prefers read-only posture:
 
 - PnP/SPO tenant site enumeration when already connected through supported app certificate auth
-- Graph report fallback where available
+- Graph report-only collection when `sharePoint.siteSource` is `GraphReports`
 - `Sites.Read.All` is generally preferred for read-only Graph access
 - Some tenant administration reads may require broader SharePoint app permissions depending on module and tenant policy
+
+If PnP/SPO tenant-site enumeration is unauthorized, interactive runs prompt before continuing. Choose the Graph-only retry when usage-report data is sufficient, or fix the app authorization and retry.
 
 ## Sensitive Values
 

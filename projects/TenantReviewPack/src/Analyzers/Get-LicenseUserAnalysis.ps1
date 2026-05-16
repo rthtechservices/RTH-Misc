@@ -112,5 +112,6 @@ function Get-LicenseUserAnalysis {
         disabledLicensedUsers = @($disabledLicensedUsers)
         staleLicensedUsers    = @($staleLicensedUsers)
         guestLicensedUsers    = @($guestLicensedUsers)
+        warnings              = @()
     }
 }

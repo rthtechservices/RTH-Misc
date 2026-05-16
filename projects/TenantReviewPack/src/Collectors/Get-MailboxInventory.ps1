@@ -164,9 +164,9 @@ function Get-MailboxInventory {
                                 mailbox               = $identity.ToString()
                                 name                  = Get-TenantReviewProperty -InputObject $rule -Name 'Name'
                                 enabled               = Get-TenantReviewProperty -InputObject $rule -Name 'Enabled'
-                                forwardTo             = @($forwardTo | ForEach-Object { $_.ToString() })
-                                redirectTo            = @($redirectTo | ForEach-Object { $_.ToString() })
-                                forwardAsAttachmentTo = @($forwardAsAttachmentTo | ForEach-Object { $_.ToString() })
+                                forwardTo             = @($forwardTo | Where-Object { $null -ne $_ } | ForEach-Object { $_.ToString() })
+                                redirectTo            = @($redirectTo | Where-Object { $null -ne $_ } | ForEach-Object { $_.ToString() })
+                                forwardAsAttachmentTo = @($forwardAsAttachmentTo | Where-Object { $null -ne $_ } | ForEach-Object { $_.ToString() })
                             }
                         }
                     }
@@ -177,8 +177,6 @@ function Get-MailboxInventory {
         } else {
             $warnings += 'Get-InboxRule is not available; inbox rule scan was skipped.'
         }
-    } else {
-        $warnings += 'Inbox rule scan skipped. Use -IncludeInboxRules to scan per-mailbox forwarding rules.'
     }
 
     $transportItems = @()
@@ -195,7 +193,7 @@ function Get-MailboxInventory {
     }
 
     $largestMailboxes = @($items | Where-Object { $null -ne $_.totalItemSizeGB } | Sort-Object -Property totalItemSizeGB -Descending | Select-Object -First 10)
-    $totalMailboxSize = ($items | Where-Object { $null -ne $_.totalItemSizeGB } | Measure-Object -Property totalItemSizeGB -Sum).Sum
+    $totalMailboxSize = Get-TenantReviewPropertySum -Items $items -Property 'totalItemSizeGB'
     if ($null -ne $totalMailboxSize) {
         $totalMailboxSize = [decimal]::Round([decimal]$totalMailboxSize, 2)
     }
@@ -215,6 +213,8 @@ function Get-MailboxInventory {
             enabledTransportRules         = @($transportItems | Where-Object { $_.state -eq 'Enabled' }).Count
             inboxRulesScanned             = $inboxRulesScanned
             inboxForwardingRulesFound     = $inboxForwardingRules.Count
+            inboxRuleScanIncluded         = [bool]$IncludeInboxRules
+            mailboxStatisticsIncluded     = [bool]$IncludeMailboxStatistics
             totalMailboxSizeGB            = $totalMailboxSize
             largestMailboxes              = @($largestMailboxes)
         }

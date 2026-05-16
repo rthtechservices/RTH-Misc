@@ -47,8 +47,8 @@
 
 ## SharePoint and OneDrive
 
-- Tenant sites from PnP/SPO where available
-- Graph SharePoint usage report fallback
+- Tenant sites from PnP/SPO when `sharePoint.siteSource` is `Auto`, `PnP`, or `SPO` and the app is authorized
+- Graph SharePoint usage reports when `sharePoint.siteSource` is `GraphReports` or when the user explicitly chooses Graph-only retry after a PnP/SPO warning
 - Site URL, title, template, storage usage, quota, modified date, and sharing capability
 - OneDrive owner, URL, storage, active file, and file counts when enabled
 

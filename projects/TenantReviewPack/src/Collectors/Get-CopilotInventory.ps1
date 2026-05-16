@@ -10,10 +10,14 @@ function Get-CopilotInventory {
         [Parameter(Mandatory = $false)]
         [string]$PriceMapPath,
 
+        [switch]$IncludeUsageReport,
+
         [switch]$IncludeRaw
     )
 
     $warnings = @()
+    $usageReportAvailable = $false
+    $usageReportStatus = if ($IncludeUsageReport) { 'Requested' } else { 'NotRequested' }
     $licenseItems = @(Get-TenantReviewProperty -InputObject $LicenseInventory -Name 'items')
     if ($licenseItems.Count -eq 0) {
         $warnings += 'License inventory was not passed or contained no items; falling back to Get-MgSubscribedSku.'
@@ -79,18 +83,26 @@ function Get-CopilotInventory {
     }
 
     $usageReport = @()
-    foreach ($commandName in @('Get-MgBetaReportMicrosoft365CopilotUsageUserDetail', 'Get-MgReportMicrosoft365CopilotUsageUserDetail')) {
-        try {
-            $usageReport = @(Invoke-TenantReviewGraphCsvReport -CommandName $commandName -ReportPeriodDays 90)
-            if ($usageReport.Count -gt 0) {
-                break
+    if ($IncludeUsageReport) {
+        foreach ($commandName in @('Get-MgBetaReportMicrosoft365CopilotUsageUserDetail', 'Get-MgReportMicrosoft365CopilotUsageUserDetail')) {
+            try {
+                $usageReport = @(Invoke-TenantReviewGraphCsvReport -CommandName $commandName -ReportPeriodDays 90)
+                if ($usageReport.Count -gt 0) {
+                    $usageReportAvailable = $true
+                    $usageReportStatus = 'Collected'
+                    break
+                }
+            } catch {
+                $usageReportStatus = "Unavailable: $($_.Exception.Message)"
+                continue
             }
-        } catch {
-            continue
         }
-    }
-    if ($usageReport.Count -eq 0) {
-        $warnings += 'Copilot usage report was unavailable or returned no rows.'
+        if ($usageReport.Count -eq 0 -and $usageReportStatus -eq 'Requested') {
+            $usageReportStatus = 'NoRows'
+        }
+        if (-not $usageReportAvailable) {
+            $warnings += "Copilot usage report was requested but unavailable or returned no rows. $usageReportStatus"
+        }
     }
 
     $activeCopilotUsers = 0
@@ -114,18 +126,24 @@ function Get-CopilotInventory {
         }
     }
 
-    $estimatedMonthlyCost = ($items | Where-Object { $null -ne $_.estimatedMonthlyCost } | Measure-Object -Property estimatedMonthlyCost -Sum).Sum
-    $estimatedUnusedMonthlyCost = ($items | Where-Object { $null -ne $_.estimatedUnusedMonthlyCost } | Measure-Object -Property estimatedUnusedMonthlyCost -Sum).Sum
+    $estimatedMonthlyCost = Get-TenantReviewPropertySum -Items $items -Property 'estimatedMonthlyCost'
+    $estimatedUnusedMonthlyCost = Get-TenantReviewPropertySum -Items $items -Property 'estimatedUnusedMonthlyCost'
+    $copilotPurchased = Get-TenantReviewPropertySum -Items $items -Property 'purchasedUnits' -Default 0
+    $copilotAssigned = Get-TenantReviewPropertySum -Items $items -Property 'assignedUnits' -Default 0
+    $copilotUnused = Get-TenantReviewPropertySum -Items $items -Property 'unusedUnits' -Default 0
     $result = [ordered]@{
         dataset       = 'CopilotInventory'
         generatedAt   = (Get-Date).ToString('o')
         summary       = [pscustomobject]@{
             copilotSkus                   = $items.Count
-            copilotPurchased              = [int](($items | Measure-Object -Property purchasedUnits -Sum).Sum)
-            copilotAssigned               = [int](($items | Measure-Object -Property assignedUnits -Sum).Sum)
-            copilotUnused                 = [int](($items | Measure-Object -Property unusedUnits -Sum).Sum)
+            copilotPurchased              = [int]$copilotPurchased
+            copilotAssigned               = [int]$copilotAssigned
+            copilotUnused                 = [int]$copilotUnused
             activeCopilotUsers            = if ($usageReport.Count -gt 0) { $activeCopilotUsers } else { $null }
             inactiveCopilotLicensedUsers  = @($licensedUsers | Where-Object { $_.isStale -eq $true }).Count
+            usageReportRequested          = [bool]$IncludeUsageReport
+            usageReportAvailable          = $usageReportAvailable
+            usageReportStatus             = $usageReportStatus
             estimatedMonthlyCost          = if ($null -ne $estimatedMonthlyCost) { [decimal]::Round([decimal]$estimatedMonthlyCost, 2) } else { $null }
             estimatedUnusedMonthlyCost    = if ($null -ne $estimatedUnusedMonthlyCost) { [decimal]::Round([decimal]$estimatedUnusedMonthlyCost, 2) } else { $null }
         }

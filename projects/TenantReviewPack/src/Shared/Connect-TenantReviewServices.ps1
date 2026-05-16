@@ -164,6 +164,7 @@ function Connect-TenantReviewServices {
                 throw 'Configured certificate thumbprint was not found in Cert:\CurrentUser\My or Cert:\LocalMachine\My. Import the public/private certificate into one of those stores and retry.'
             }
             $certificateFound = $true
+            Set-TenantReviewGraphAppToken -TenantId $tenantId -ClientId $clientId -Certificate $certificate
 
             Connect-MgGraph -TenantId $tenantId -ClientId $clientId -CertificateThumbprint $thumbprint -NoWelcome -ErrorAction Stop | Out-Null
         }
@@ -222,8 +223,14 @@ function Connect-TenantReviewServices {
     $sharePointSettings = Get-ReviewProperty -InputObject $Settings -Name 'sharePoint'
     $sharePointEnabled = Test-ReviewTruthy -Value (Get-ReviewProperty -InputObject $sharePointSettings -Name 'enabled')
     $sharePointAdminUrl = Get-ReviewProperty -InputObject $sharePointSettings -Name 'adminUrl'
+    $sharePointSiteSource = Get-ReviewProperty -InputObject $sharePointSettings -Name 'siteSource'
+    if (-not $sharePointSiteSource) {
+        $sharePointSiteSource = 'Auto'
+    }
     if ($sharePointEnabled) {
-        if (-not $sharePointAdminUrl) {
+        if ($sharePointSiteSource -eq 'GraphReports') {
+            Write-Verbose 'SharePoint PnP/SPO connection skipped because sharePoint.siteSource is GraphReports.'
+        } elseif (-not $sharePointAdminUrl) {
             $warnings += 'SharePoint connection was skipped because sharePoint.adminUrl is not configured.'
         } elseif (Get-Module -ListAvailable -Name 'PnP.PowerShell') {
             try {
