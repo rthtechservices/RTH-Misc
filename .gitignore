@@ -6,3 +6,5 @@
 config/*local*.json
 **/config/*local*.json
 *secret*.json
+*settings*.json
+projects/TenantReviewPack/Settings.json
