@@ -1,6 +1,6 @@
 {
   "dataset": "DeviceInventory",
-  "generatedAt": "2026-05-15T20:43:09.3589683-07:00",
+  "generatedAt": "2026-05-15T21:25:17.9275860-07:00",
   "staleAfterDays": 90,
   "summary": {
     "totalDevices": 9,

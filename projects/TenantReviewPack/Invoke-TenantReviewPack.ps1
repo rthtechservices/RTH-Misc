@@ -211,12 +211,33 @@ function Resolve-TenantReviewAiRuntime {
         Ensure-TenantReviewObjectProperty -InputObject $aiSettings -Name 'endpoint' -Value $endpointAnswer
     }
 
+    $directApiKey = Get-ObjectPropertyValue -InputObject $aiSettings -Name 'apiKey'
+    if (-not $directApiKey) {
+        $directApiKey = Get-ObjectPropertyValue -InputObject $aiSettings -Name 'apiKeyValue'
+    }
+    if (-not $directApiKey) {
+        $directApiKey = Get-ObjectPropertyValue -InputObject $aiSettings -Name 'key'
+    }
+
     $apiKeyVariable = Get-ObjectPropertyValue -InputObject $aiSettings -Name 'apiKeyEnvironmentVariable'
-    $apiKey = if ($apiKeyVariable) { [Environment]::GetEnvironmentVariable($apiKeyVariable) } else { $null }
+    $apiKey = if ($directApiKey) {
+        $directApiKey
+    } elseif ($apiKeyVariable) {
+        $environmentValue = [Environment]::GetEnvironmentVariable($apiKeyVariable)
+        if ($environmentValue) {
+            $environmentValue
+        } elseif ($apiKeyVariable.ToString().Length -ge 32) {
+            $apiKeyVariable
+        } else {
+            $null
+        }
+    } else {
+        $null
+    }
     if (-not $apiKey) {
-        Write-Warning 'AI is enabled but the configured API key environment variable is not set.'
+        Write-Warning 'AI is enabled but no API key was found in Settings.json or the configured environment variable.'
         if (-not (Test-TenantReviewInteractiveHost)) {
-            throw 'AI is enabled but the API key was unavailable. Set the configured ai.apiKeyEnvironmentVariable before running non-interactively.'
+            throw 'AI is enabled but the API key was unavailable. Add ai.apiKey to Settings.json or set the configured ai.apiKeyEnvironmentVariable before running non-interactively.'
         }
 
         $secureKey = Read-Host 'Enter the AI API key for this run, or press Enter to abort' -AsSecureString

@@ -118,6 +118,141 @@ function Invoke-AINarrative {
         }
     }
 
+    function Get-AiSettingValue {
+        param([string[]]$Names)
+
+        foreach ($name in $Names) {
+            $value = Get-TenantReviewProperty -InputObject $aiSettings -Name $name
+            if ($value) {
+                return $value
+            }
+        }
+
+        return $null
+    }
+
+    function Resolve-TenantReviewAiApiKey {
+        if ($RuntimeApiKey) {
+            return $RuntimeApiKey
+        }
+
+        $directKey = Get-AiSettingValue -Names @('apiKey', 'apiKeyValue', 'key')
+        if ($directKey) {
+            return $directKey
+        }
+
+        $apiKeyVariable = Get-TenantReviewProperty -InputObject $aiSettings -Name 'apiKeyEnvironmentVariable'
+        if (-not $apiKeyVariable) {
+            return $null
+        }
+
+        $environmentValue = [Environment]::GetEnvironmentVariable($apiKeyVariable)
+        if ($environmentValue) {
+            return $environmentValue
+        }
+
+        if ($apiKeyVariable.ToString().Length -ge 32) {
+            return $apiKeyVariable
+        }
+
+        return $null
+    }
+
+    function Resolve-TenantReviewAiRequest {
+        param(
+            [Parameter(Mandatory = $true)]
+            [string]$Endpoint,
+
+            [Parameter(Mandatory = $false)]
+            [string]$Model
+        )
+
+        $apiVersion = Get-AiSettingValue -Names @('apiVersion', 'azureApiVersion')
+        if (-not $apiVersion) {
+            $apiVersion = '2025-01-01-preview'
+        }
+
+        $trimmedEndpoint = $Endpoint.TrimEnd('/')
+        $requestKind = 'ChatCompletions'
+        $requestUri = $Endpoint
+        $isAzure = (
+            $trimmedEndpoint -match '\.openai\.azure\.com' -or
+            $trimmedEndpoint -match '\.cognitiveservices\.azure\.com' -or
+            $trimmedEndpoint -match '\.services\.ai\.azure\.com'
+        )
+        $deployment = Get-AiSettingValue -Names @('deployment', 'deploymentName', 'azureDeployment')
+        if (-not $deployment) {
+            $deployment = $Model
+        }
+
+        if ($trimmedEndpoint -match '/responses(\?|$)') {
+            $requestKind = 'Responses'
+        } elseif ($trimmedEndpoint -match '/chat/completions(\?|$)') {
+            $requestKind = 'ChatCompletions'
+        } elseif ($isAzure -and $trimmedEndpoint -match '/openai/deployments/[^/]+$') {
+            $requestUri = "$trimmedEndpoint/chat/completions?api-version=$apiVersion"
+        } elseif ($isAzure -and $trimmedEndpoint -notmatch '/openai/') {
+            if (-not $deployment) {
+                throw 'AI endpoint is an Azure OpenAI resource URL, but ai.deployment or ai.model is missing.'
+            }
+            $deploymentName = [uri]::EscapeDataString($deployment)
+            $requestUri = "$trimmedEndpoint/openai/deployments/$deploymentName/chat/completions?api-version=$apiVersion"
+        } elseif ($trimmedEndpoint -match 'api\.openai\.com$') {
+            $requestKind = 'Responses'
+            $requestUri = "$trimmedEndpoint/v1/responses"
+        } elseif ($trimmedEndpoint -match 'api\.openai\.com/v1$') {
+            $requestKind = 'Responses'
+            $requestUri = "$trimmedEndpoint/responses"
+        }
+
+        [pscustomobject]@{
+            Uri     = $requestUri
+            Kind    = $requestKind
+            IsAzure = $isAzure
+        }
+    }
+
+    function Get-TenantReviewAiResponseText {
+        param([Parameter(Mandatory = $true)][object]$Response)
+
+        $content = Get-TenantReviewProperty -InputObject $Response -Name 'output_text'
+        if ($content) {
+            return $content
+        }
+
+        $choices = @(Get-TenantReviewProperty -InputObject $Response -Name 'choices')
+        if ($choices.Count -gt 0) {
+            $firstChoice = $choices | Select-Object -First 1
+            $message = Get-TenantReviewProperty -InputObject $firstChoice -Name 'message'
+            $content = Get-TenantReviewProperty -InputObject $message -Name 'content'
+            if ($content) {
+                return $content
+            }
+        }
+
+        foreach ($outputItem in @(Get-TenantReviewProperty -InputObject $Response -Name 'output')) {
+            foreach ($contentItem in @(Get-TenantReviewProperty -InputObject $outputItem -Name 'content')) {
+                $text = Get-TenantReviewProperty -InputObject $contentItem -Name 'text'
+                if ($text) {
+                    return $text
+                }
+            }
+        }
+
+        return $null
+    }
+
+    function ConvertFrom-TenantReviewAiJsonText {
+        param([Parameter(Mandatory = $true)][string]$Text)
+
+        $clean = $Text.Trim()
+        if ($clean -match '^```(?:json)?\s*(?<json>[\s\S]*?)\s*```$') {
+            $clean = $Matches['json'].Trim()
+        }
+
+        return $clean | ConvertFrom-Json -ErrorAction Stop
+    }
+
     $aiSettings = Get-TenantReviewProperty -InputObject $Settings -Name 'ai'
     $aiEnabled = Test-TenantReviewTruthy -Value (Get-TenantReviewProperty -InputObject $aiSettings -Name 'enabled')
     if (-not $aiEnabled) {
@@ -125,10 +260,9 @@ function Invoke-AINarrative {
     }
 
     $endpoint = Get-TenantReviewProperty -InputObject $aiSettings -Name 'endpoint'
-    $apiKeyVariable = Get-TenantReviewProperty -InputObject $aiSettings -Name 'apiKeyEnvironmentVariable'
-    $apiKey = if ($RuntimeApiKey) { $RuntimeApiKey } elseif ($apiKeyVariable) { [Environment]::GetEnvironmentVariable($apiKeyVariable) } else { $null }
+    $apiKey = Resolve-TenantReviewAiApiKey
     if (-not $endpoint -or -not $apiKey) {
-        throw 'AI narrative is enabled, but the endpoint or API key is missing. Provide a valid ai.endpoint and an API key via the configured environment variable or interactive prompt.'
+        throw 'AI narrative is enabled, but the endpoint or API key is missing. Provide a valid ai.endpoint and an API key in Settings.json or the configured environment variable.'
     }
 
     $datasetSummaries = @()
@@ -141,7 +275,9 @@ function Invoke-AINarrative {
     }
 
     $prompt = @"
-Return strict JSON only. Create concise Microsoft 365 tenant review narrative sections.
+Return strict JSON only as one top-level object with this exact shape:
+{"sections":[{"dataset":"DatasetName","headline":"Short headline","plainEnglish":"One or two sentences","businessImpact":"One sentence","recommendedAction":"One sentence","confidence":"High|Medium|Low"}]}
+Create concise Microsoft 365 tenant review narrative sections.
 Each section must include dataset, headline, plainEnglish, businessImpact, recommendedAction, and confidence.
 Use only this supplied data:
 $($datasetSummaries | ConvertTo-Json -Depth 8)
@@ -149,7 +285,8 @@ $($datasetSummaries | ConvertTo-Json -Depth 8)
 
     try {
         $model = Get-TenantReviewProperty -InputObject $aiSettings -Name 'model'
-        if ($endpoint -match '/responses') {
+        $request = Resolve-TenantReviewAiRequest -Endpoint $endpoint -Model $model
+        if ($request.Kind -eq 'Responses') {
             $bodyObject = @{
                 model = $model
                 input = @(
@@ -163,34 +300,68 @@ $($datasetSummaries | ConvertTo-Json -Depth 8)
                     @{ role = 'system'; content = 'You produce strict JSON only for client-ready Microsoft 365 review summaries.' },
                     @{ role = 'user'; content = $prompt }
                 )
-                temperature = 0.2
             }
             if ($model) {
                 $bodyObject.model = $model
             }
+            $temperature = Get-AiSettingValue -Names @('temperature')
+            if ($null -ne $temperature) {
+                $bodyObject.temperature = $temperature
+            }
+            $useJsonResponseFormat = Get-AiSettingValue -Names @('responseFormatJson')
+            if ($null -eq $useJsonResponseFormat -or (Test-TenantReviewTruthy -Value $useJsonResponseFormat)) {
+                $bodyObject.response_format = @{ type = 'json_object' }
+            }
         }
 
         $body = $bodyObject | ConvertTo-Json -Depth 12
-        $response = Invoke-RestMethod -Method Post -Uri $endpoint -Headers @{ 'api-key' = $apiKey; 'Content-Type' = 'application/json' } -Body $body -ErrorAction Stop
-        $content = Get-TenantReviewProperty -InputObject $response -Name 'output_text'
-        if (-not $content) {
-            $content = Get-TenantReviewProperty -InputObject (($response.choices | Select-Object -First 1).message) -Name 'content'
+        $headers = if ($request.IsAzure) {
+            @{ 'api-key' = $apiKey; 'Content-Type' = 'application/json' }
+        } else {
+            @{ Authorization = "Bearer $apiKey"; 'Content-Type' = 'application/json' }
         }
-        if (-not $content) {
-            $firstOutput = @($response.output) | Select-Object -First 1
-            $firstContent = @(Get-TenantReviewProperty -InputObject $firstOutput -Name 'content') | Select-Object -First 1
-            $content = Get-TenantReviewProperty -InputObject $firstContent -Name 'text'
-        }
+        $response = Invoke-RestMethod -Method Post -Uri $request.Uri -Headers $headers -Body $body -ErrorAction Stop
+        $content = Get-TenantReviewAiResponseText -Response $response
         if (-not $content) {
             throw 'AI response did not include message content.'
         }
 
-        $parsed = $content | ConvertFrom-Json -ErrorAction Stop
+        $parsed = ConvertFrom-TenantReviewAiJsonText -Text $content
+        $sectionsValue = Get-TenantReviewProperty -InputObject $parsed -Name 'sections'
+        if ($null -eq $sectionsValue) {
+            $sectionsValue = Get-TenantReviewProperty -InputObject $parsed -Name 'narrativeSections'
+        }
+        if ($null -eq $sectionsValue) {
+            $sectionsValue = Get-TenantReviewProperty -InputObject $parsed -Name 'items'
+        }
+        if ($null -eq $sectionsValue) {
+            $narrativeObject = Get-TenantReviewProperty -InputObject $parsed -Name 'narrative'
+            $sectionsValue = Get-TenantReviewProperty -InputObject $narrativeObject -Name 'sections'
+        }
+
+        $sections = @($sectionsValue | Where-Object { $null -ne $_ })
+        if ($sections.Count -eq 0 -and $parsed -is [array]) {
+            $sections = @($parsed | Where-Object { $null -ne $_ })
+        }
+        if ($sections.Count -eq 0 -and (Get-TenantReviewProperty -InputObject $parsed -Name 'dataset')) {
+            $sections = @($parsed)
+        }
+        if ($sections.Count -eq 0) {
+            throw 'AI response JSON did not include narrative sections.'
+        }
+        foreach ($section in $sections) {
+            foreach ($requiredProperty in @('dataset', 'headline', 'plainEnglish', 'businessImpact', 'recommendedAction', 'confidence')) {
+                if (-not (Get-TenantReviewProperty -InputObject $section -Name $requiredProperty)) {
+                    throw "AI response section was missing required property '$requiredProperty'."
+                }
+            }
+        }
+
         [pscustomobject]@{
             dataset     = 'Narrative'
             generatedAt = (Get-Date).ToString('o')
             source      = 'AI'
-            sections    = @(Get-TenantReviewProperty -InputObject $parsed -Name 'sections')
+            sections    = @($sections)
             warnings    = @()
         }
     } catch {
