@@ -1,6 +1,6 @@
 {
   "dataset": "MailboxInventory",
-  "generatedAt": "2026-05-15T21:25:14.7597503-07:00",
+  "generatedAt": "2026-05-16T01:17:05.6892356-07:00",
   "summary": {
     "totalMailboxes": 9,
     "userMailboxes": 1,
@@ -15,7 +15,7 @@
     "inboxForwardingRulesFound": 17,
     "inboxRuleScanIncluded": true,
     "mailboxStatisticsIncluded": true,
-    "totalMailboxSizeGB": 186719055.74,
+    "totalMailboxSizeGB": 186719056.42,
     "largestMailboxes": [
       {
         "displayName": "Escala",
@@ -27,7 +27,7 @@
         "forwardingSmtpAddress": null,
         "deliverToMailboxAndForward": false,
         "externalForwardingSuspected": false,
-        "totalItemSizeGB": 186719050.60,
+        "totalItemSizeGB": 186719051.28,
         "itemCount": 845
       },
       {
@@ -54,7 +54,7 @@
         "deliverToMailboxAndForward": false,
         "externalForwardingSuspected": false,
         "totalItemSizeGB": 0.53,
-        "itemCount": 2161
+        "itemCount": 2162
       },
       {
         "displayName": "HGLLP",
@@ -160,7 +160,7 @@
       "forwardingSmtpAddress": null,
       "deliverToMailboxAndForward": false,
       "externalForwardingSuspected": false,
-      "totalItemSizeGB": 186719050.60,
+      "totalItemSizeGB": 186719051.28,
       "itemCount": 845
     },
     {
@@ -213,7 +213,7 @@
       "deliverToMailboxAndForward": false,
       "externalForwardingSuspected": false,
       "totalItemSizeGB": 0.53,
-      "itemCount": 2161
+      "itemCount": 2162
     },
     {
       "displayName": "Rohan Hare",

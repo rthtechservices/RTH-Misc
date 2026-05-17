@@ -1,6 +1,6 @@
 {
   "dataset": "DeviceInventory",
-  "generatedAt": "2026-05-15T21:25:17.9275860-07:00",
+  "generatedAt": "2026-05-16T01:17:08.9579905-07:00",
   "staleAfterDays": 90,
   "summary": {
     "totalDevices": 9,
@@ -85,7 +85,7 @@
       "operatingSystemVersion": "10.0.26200.8514",
       "trustType": "AzureAd",
       "approximateLastSignInDateTime": "2026-05-07T16:58:20.0000000Z",
-      "daysSinceLastSignIn": 8,
+      "daysSinceLastSignIn": 9,
       "isStale": false,
       "isManaged": false,
       "complianceState": null,

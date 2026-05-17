@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microsoft 365 Tenant Review &mdash; RTH Tech Services Inc.</title>
+  <style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7f8fb; color: #1a1a2e; line-height: 1.6; font-size: 15px; }
+
+/* Cover */
+.cover { background: linear-gradient(135deg, #5a2f61 0%, #6f28db 55%, #4fa7db 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 60px 40px; text-align: center; color: white; page-break-after: always; }
+.cover-inner { max-width: 700px; }
+.cover-eyebrow { font-size: 0.85em; letter-spacing: 3px; text-transform: uppercase; opacity: 0.7; margin-bottom: 28px; }
+.cover-title { font-size: 3.2em; font-weight: 800; margin-bottom: 0.15em; line-height: 1.1; }
+.cover-subtitle { font-size: 1.6em; font-weight: 300; opacity: 0.9; margin-bottom: 36px; }
+.cover-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; }
+.cover-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 8px 18px; font-size: 0.85em; letter-spacing: 0.4px; }
+.cover-prepared { font-size: 0.82em; opacity: 0.65; margin-top: 32px; letter-spacing: 1px; text-transform: uppercase; }
+.cover-divider { width: 60px; height: 3px; background: rgba(255,255,255,0.4); margin: 0 auto 28px; border-radius: 2px; }
+
+/* Page wrapper */
+.page { max-width: 1120px; margin: 0 auto; padding: 56px 40px; }
+
+/* Section structure */
+.report-section { margin-bottom: 52px; }
+.section-header { display: flex; align-items: center; gap: 16px; background: linear-gradient(90deg, #5a2f61, #6f28db); color: white; padding: 18px 28px; border-radius: 8px 8px 0 0; }
+.section-header h2 { font-size: 1.35em; font-weight: 700; }
+.section-subtitle { font-size: 0.82em; opacity: 0.8; margin-top: 2px; }
+.section-icon { font-size: 1.7em; }
+.section-body { background: white; padding: 28px 32px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 8px 8px; }
+
+/* Executive summary */
+.exec-health { background: linear-gradient(90deg, #ebf5fb, #f5eeff); border-left: 4px solid #4fa7db; border-radius: 4px; padding: 18px 22px; margin-bottom: 22px; font-size: 1.05em; color: #1a3a4a; }
+.exec-bullets { list-style: none; padding: 0; display: grid; gap: 10px; }
+.exec-bullets li { padding: 13px 16px 13px 44px; position: relative; background: #f9f9fc; border-radius: 6px; border-left: 3px solid #6f28db; font-size: 0.94em; color: #333; }
+.exec-bullets li::before { content: '→'; position: absolute; left: 16px; color: #6f28db; font-weight: 700; }
+
+/* KPI grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.kpi-card { background: white; border-radius: 10px; padding: 18px; border: 1px solid #e2e8f0; border-top: 4px solid #767779; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.kpi-card.status-good    { border-top-color: #27ae60; }
+.kpi-card.status-watch   { border-top-color: #f39c12; }
+.kpi-card.status-action  { border-top-color: #e74c3c; }
+.kpi-card.status-info    { border-top-color: #4fa7db; }
+.kpi-card.status-na      { border-top-color: #aaa; }
+.kpi-value { font-size: 2.2em; font-weight: 800; color: #5a2f61; line-height: 1.1; margin-bottom: 4px; }
+.kpi-label { font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #767779; margin-bottom: 8px; }
+.kpi-description { font-size: 0.8em; color: #555; line-height: 1.4; margin-bottom: 12px; }
+.kpi-badge { display: inline-block; font-size: 0.68em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 3px 10px; border-radius: 20px; }
+.badge-good   { background: #d5f5e3; color: #1e8449; }
+.badge-watch  { background: #fef9e7; color: #9a6b0e; }
+.badge-action { background: #fde8e8; color: #c0392b; }
+.badge-info   { background: #ebf5fb; color: #1a6a9a; }
+.badge-na     { background: #f2f3f4; color: #566573; }
+
+/* Narrative cards */
+.narrative-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px 24px; margin-bottom: 16px; position: relative; }
+.narrative-card.status-good   { border-left: 4px solid #27ae60; }
+.narrative-card.status-watch  { border-left: 4px solid #f39c12; }
+.narrative-card.status-action { border-left: 4px solid #e74c3c; }
+.narrative-card.status-info   { border-left: 4px solid #4fa7db; }
+.narrative-card.status-na     { border-left: 4px solid #aaa; }
+.narrative-badge { float: right; margin-left: 8px; margin-bottom: 4px; font-size: 0.7em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 3px 10px; border-radius: 20px; }
+.nar-icon { float: left; margin-right: 10px; font-size: 1.3em; }
+.narrative-headline { font-size: 1.08em; font-weight: 700; color: #2c3e50; margin-bottom: 10px; clear: both; }
+.narrative-plain { color: #444; margin-bottom: 10px; font-size: 0.93em; }
+.narrative-impact { font-size: 0.88em; background: #f8f9fb; padding: 8px 12px; border-radius: 4px; margin-bottom: 7px; color: #555; }
+.narrative-impact strong { color: #5a2f61; }
+.narrative-action { font-size: 0.88em; background: #eef3ff; padding: 8px 12px; border-radius: 4px; color: #2c3e50; }
+.narrative-action strong { color: #4fa7db; }
+
+/* Recommendations */
+.rec-card { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 14px; overflow: hidden; display: flex; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.rec-priority { background: linear-gradient(135deg, #5a2f61, #6f28db); color: white; font-weight: 800; font-size: 1.15em; min-width: 58px; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.rec-body { padding: 14px 18px; flex: 1; }
+.rec-title { font-size: 0.97em; font-weight: 700; color: #2c3e50; margin-bottom: 6px; }
+.rec-why { font-size: 0.86em; color: #555; margin-bottom: 10px; line-height: 1.5; }
+.rec-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.rec-tag { font-size: 0.72em; font-weight: 600; padding: 3px 10px; border-radius: 20px; border: 1px solid #d4d4d4; color: #555; background: #fafafa; }
+.effort-low  { border-color: #a9d18e; color: #375623; background: #f2f7ed; }
+.effort-med  { border-color: #f4b942; color: #7d5000; background: #fef8ec; }
+.effort-high { border-color: #e07b7b; color: #7b0000; background: #fdf0f0; }
+.impact-high { border-color: #4fa7db; color: #1a5276; background: #ebf5fb; }
+
+/* Data coverage */
+.coverage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.coverage-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; }
+.coverage-icon { font-size: 1.2em; width: 26px; text-align: center; }
+.coverage-label { font-size: 0.84em; font-weight: 600; color: #2c3e50; }
+.coverage-status { font-size: 0.76em; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.83em; margin-top: 12px; }
+.data-table th { background: #5a2f61; color: white; text-align: left; padding: 10px 14px; font-weight: 600; font-size: 0.78em; letter-spacing: 0.3px; }
+.data-table td { padding: 9px 14px; border-bottom: 1px solid #eee; color: #333; vertical-align: middle; }
+.data-table tr:nth-child(even) td { background: #f9f9fc; }
+.data-table tr:hover td { background: #f0f4ff; }
+.appendix-section { margin-bottom: 36px; }
+.appendix-section h3 { font-size: 1.02em; font-weight: 700; color: #5a2f61; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 14px; }
+
+/* Print */
+@media print {
+  .cover { min-height: auto; padding: 80px; page-break-after: always; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .report-section { page-break-inside: avoid; }
+  @page { margin: 0.6in; }
+}
+@media (max-width: 600px) {
+  .page { padding: 20px 14px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .rec-card { flex-direction: column; }
+  .cover-title { font-size: 2em; }
+}</style>
+</head>
+<body>
+
+<!-- ═══ COVER ══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-eyebrow">Microsoft 365 Tenant Review</div>
+    <div class="cover-divider"></div>
+    <div class="cover-title">RTH Tech Services Inc.</div>
+    <div class="cover-subtitle">Review Period: 2026</div>
+    <div class="cover-badges">
+      <span class="cover-badge">&#128197; Generated: May 16, 2026</span>
+      <span class="cover-badge">&#128274; Confidential</span>
+      <span class="cover-badge">&#128269; Tenant: rthtechservices</span>
+    </div>
+    <div class="cover-prepared">Prepared by RTH Tech Services</div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ═══ EXECUTIVE SUMMARY ═══════════════════════════════════════════════════ -->
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">📋</span><div><h2>Executive Summary</h2></div></div>
+  <div class="section-body">
+    <div class="exec-health">The tenant is in good standing. No major issues were identified during this review.</div>
+    <ul class="exec-bullets">
+      <li>This review covers the RTH Tech Services Inc. Microsoft 365 tenant. The tenant has 15 user accounts — 10 members and 5 guests.</li>
+<li>12 Microsoft 365 licenses are currently assigned with an estimated monthly spend of CAD $40 (partial — 9 SKUs are missing price data). 1049993 licenses appear unassigned.</li>
+<li>Mail forwarding is active on 2 mailboxes, and 17 inbox forwarding rules were found. These should be confirmed as intentional.</li>
+<li>2 of 3 Teams workspaces had no recorded activity in the last 90 days and may be candidates for archiving.</li>
+<li>5 of 9 registered devices appear stale. Cleaning up outdated device records supports better compliance and security reporting.</li>
+<li>1 Microsoft 365 Copilot license is assigned at an estimated CAD $40/month. Enable usage reporting to confirm active adoption.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══ KPI DASHBOARD ════════════════════════════════════════════════════════ -->
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">📊</span><div><h2>Key Metrics at a Glance</h2><div class="section-subtitle">Headline numbers across all reviewed areas</div></div></div>
+  <div class="section-body">
+    <div class="kpi-grid">
+      <div class="kpi-card status-info"><div class="kpi-value">15</div><div class="kpi-label">Total Users</div><div class="kpi-description">All accounts in the tenant — 10 members and 5 guests.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">5</div><div class="kpi-label">Guest Users</div><div class="kpi-description">External users with access to tenant resources. Review periodically to confirm ongoing need.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-na"><div class="kpi-value">N/A</div><div class="kpi-label">Stale Users</div><div class="kpi-description">Sign-in activity data was not collected this run. Enable sign-in reporting to detect dormant accounts.</div><span class="kpi-badge badge-na">Not Available</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">12</div><div class="kpi-label">Licensed Users</div><div class="kpi-description">Microsoft 365 license assignments currently active in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-action"><div class="kpi-value">1,049,993</div><div class="kpi-label">Unused Licenses</div><div class="kpi-description">Purchased licenses not currently assigned to any user.</div><span class="kpi-badge badge-action">Action Recommended</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">CAD $40.00</div><div class="kpi-label">Est. Monthly Spend</div><div class="kpi-description">Estimated total monthly license cost based on available SKU price data.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Disabled Licensed Users</div><div class="kpi-description">Disabled accounts that still have Microsoft 365 licenses assigned.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Stale Licensed Users</div><div class="kpi-description">Licensed accounts with no recent sign-in. May no longer need paid licenses.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">9</div><div class="kpi-label">Total Mailboxes</div><div class="kpi-description">All mailboxes in Exchange Online — 4 shared mailboxes included.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">2</div><div class="kpi-label">Mailboxes with Forwarding</div><div class="kpi-description">Mailboxes configured to forward messages to another address.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">External Forwarding</div><div class="kpi-description">Mailboxes suspected of forwarding messages outside the organisation. Should be reviewed.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-action"><div class="kpi-value">17</div><div class="kpi-label">Inbox Forwarding Rules</div><div class="kpi-description">Inbox rules configured to redirect or forward messages found across scanned mailboxes.</div><span class="kpi-badge badge-action">Action Recommended</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">38</div><div class="kpi-label">SharePoint Sites</div><div class="kpi-description">Total SharePoint Online sites in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">22.1 GB</div><div class="kpi-label">SharePoint Storage</div><div class="kpi-description">Total storage used across all SharePoint sites.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">External Sharing Sites</div><div class="kpi-description">Sites with external sharing enabled. Should be intentional and regularly reviewed.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">0</div><div class="kpi-label">OneDrive Accounts</div><div class="kpi-description">Personal OneDrive accounts provisioned in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">3</div><div class="kpi-label">Total Teams</div><div class="kpi-description">Microsoft Teams workspaces in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">2</div><div class="kpi-label">Inactive Teams</div><div class="kpi-description">Teams with no recorded activity in the last 90 days. May be candidates for archiving.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Teams Without Owners</div><div class="kpi-description">Teams with no assigned owner — an unmanaged workspace with no accountable steward.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">9</div><div class="kpi-label">Total Devices</div><div class="kpi-description">Devices registered in Entra ID — 6 Windows, 3 Android.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">5</div><div class="kpi-label">Stale Devices</div><div class="kpi-description">Devices that have not checked in recently. May represent decommissioned endpoints.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">0</div><div class="kpi-label">Intune Managed</div><div class="kpi-description">Devices actively managed through Microsoft Intune for compliance and policy enforcement.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">1</div><div class="kpi-label">Copilot Licenses</div><div class="kpi-description">Microsoft 365 Copilot licenses purchased for the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Unused Copilot Licenses</div><div class="kpi-description">Copilot licenses purchased but not yet assigned to any user.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-na"><div class="kpi-value">N/A</div><div class="kpi-label">Active Copilot Users</div><div class="kpi-description">Usage activity data was not collected this run. Enable Copilot usage reporting for adoption insight.</div><span class="kpi-badge badge-na">Not Available</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">CAD $40.00</div><div class="kpi-label">Copilot Monthly Spend</div><div class="kpi-description">Estimated monthly cost for all Copilot licenses based on available price data.</div><span class="kpi-badge badge-info">Info</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN SECTIONS ════════════════════════════════════════════════════════ -->
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">🏢</span><div><h2>Tenant Overview</h2></div></div>
+  <div class="section-body">
+    
+    <div class="narrative-card status-good">
+  <span class="nar-icon">🏢</span><span class="narrative-badge badge-good">Healthy</span>
+  <div class="narrative-headline">Tenant configuration is stable and fully verified</div>
+  <div class="narrative-plain">RTH Tech Services Inc. has a properly configured Microsoft 365 tenant with all five domains verified and no federation in place. Core setup appears stable and centrally managed.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> A properly verified and non-federated tenant reduces identity complexity and supports predictable authentication behavior.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Confirm password expiration policy and validate that the technical notification address is monitored and backed up.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">💳</span><div><h2>Cost &amp; Licensing Review</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">12</div><div class="kpi-label">Licensed Users</div><div class="kpi-description">Microsoft 365 license assignments currently active in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-action"><div class="kpi-value">1,049,993</div><div class="kpi-label">Unused Licenses</div><div class="kpi-description">Purchased licenses not currently assigned to any user.</div><span class="kpi-badge badge-action">Action Recommended</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">CAD $40.00</div><div class="kpi-label">Est. Monthly Spend</div><div class="kpi-description">Estimated total monthly license cost based on available SKU price data.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Disabled Licensed Users</div><div class="kpi-description">Disabled accounts that still have Microsoft 365 licenses assigned.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Stale Licensed Users</div><div class="kpi-description">Licensed accounts with no recent sign-in. May no longer need paid licenses.</div><span class="kpi-badge badge-good">Healthy</span></div></div>
+    <div class="narrative-card status-watch">
+  <span class="nar-icon">💳</span><span class="narrative-badge badge-watch">Watch</span>
+  <div class="narrative-headline">License inventory shows significant SKU count anomaly</div>
+  <div class="narrative-plain">The tenant reports over one million purchased licenses but only 12 assigned, with an estimated total cost of $40 CAD per month. This discrepancy suggests reporting or SKU configuration issues rather than actual spend.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Inaccurate license counts and missing pricing data can obscure true spend and complicate budgeting or compliance reviews.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Review license subscriptions in the Microsoft 365 admin center to validate actual quantities and ensure pricing data is complete for accurate cost reporting.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">📊</span><div><h2>License Optimisation</h2></div></div>
+  <div class="section-body">
+    
+    <div class="narrative-card status-watch">
+  <span class="nar-icon">📊</span><span class="narrative-badge badge-watch">Watch</span>
+  <div class="narrative-headline">High reported unused license count requires validation</div>
+  <div class="narrative-plain">Nearly all reported licenses appear unused, but no direct cost impact is calculated. This likely reflects a reporting inconsistency rather than actual financial waste.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> If accurate, unused licenses could represent financial waste; if inaccurate, reporting gaps may undermine governance decisions.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Reconcile subscription counts against Microsoft billing to confirm true license quantities and eliminate reporting anomalies.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">👥</span><div><h2>Identity &amp; User Review</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">15</div><div class="kpi-label">Total Users</div><div class="kpi-description">All accounts in the tenant — 10 members and 5 guests.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">5</div><div class="kpi-label">Guest Users</div><div class="kpi-description">External users with access to tenant resources. Review periodically to confirm ongoing need.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-na"><div class="kpi-value">N/A</div><div class="kpi-label">Stale Users</div><div class="kpi-description">Sign-in activity data was not collected this run. Enable sign-in reporting to detect dormant accounts.</div><span class="kpi-badge badge-na">Not Available</span></div></div>
+    <div class="narrative-card status-action">
+  <span class="nar-icon">👥</span><span class="narrative-badge badge-action">Action Recommended</span>
+  <div class="narrative-headline">Most users unlicensed and no sign-in tracking enabled</div>
+  <div class="narrative-plain">The tenant contains 15 users, but only 2 are licensed and sign-in activity reporting has not been enabled. This limits visibility into actual usage and risk.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Limited licensing and lack of sign-in data reduce oversight of account activity and potential security exposure.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Enable Azure AD sign-in activity reporting and review whether unlicensed accounts are required or should be removed.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">📧</span><div><h2>Exchange &amp; Mail Flow</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">9</div><div class="kpi-label">Total Mailboxes</div><div class="kpi-description">All mailboxes in Exchange Online — 4 shared mailboxes included.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">2</div><div class="kpi-label">Mailboxes with Forwarding</div><div class="kpi-description">Mailboxes configured to forward messages to another address.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">External Forwarding</div><div class="kpi-description">Mailboxes suspected of forwarding messages outside the organisation. Should be reviewed.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-action"><div class="kpi-value">17</div><div class="kpi-label">Inbox Forwarding Rules</div><div class="kpi-description">Inbox rules configured to redirect or forward messages found across scanned mailboxes.</div><span class="kpi-badge badge-action">Action Recommended</span></div></div>
+    <div class="narrative-card status-action">
+  <span class="nar-icon">📧</span><span class="narrative-badge badge-action">Action Recommended</span>
+  <div class="narrative-headline">Mailbox storage heavily concentrated in one shared mailbox</div>
+  <div class="narrative-plain">Email usage is modest overall, but one shared mailbox holds nearly all reported storage. Two mailboxes have forwarding enabled, both routing internally.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Mailbox size anomalies and forwarding rules can mask data governance or security risks if not validated.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Validate mailbox statistics for accuracy, review the Escala shared mailbox, and assess the necessity of existing inbox forwarding rules.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">📁</span><div><h2>SharePoint &amp; OneDrive</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">38</div><div class="kpi-label">SharePoint Sites</div><div class="kpi-description">Total SharePoint Online sites in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">22.1 GB</div><div class="kpi-label">SharePoint Storage</div><div class="kpi-description">Total storage used across all SharePoint sites.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">External Sharing Sites</div><div class="kpi-description">Sites with external sharing enabled. Should be intentional and regularly reviewed.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">0</div><div class="kpi-label">OneDrive Accounts</div><div class="kpi-description">Personal OneDrive accounts provisioned in the tenant.</div><span class="kpi-badge badge-info">Info</span></div></div>
+    <div class="narrative-card status-good">
+  <span class="nar-icon">📁</span><span class="narrative-badge badge-good">Healthy</span>
+  <div class="narrative-headline">Low SharePoint utilization with no external sharing</div>
+  <div class="narrative-plain">SharePoint usage is light, with 38 sites consuming a small portion of the available storage and no external sharing enabled. OneDrive reporting was not collected.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Low storage utilization reduces risk, but missing OneDrive visibility limits full assessment of data exposure.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Enable OneDrive reporting and periodically review site ownership and lifecycle to prevent sprawl.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">💬</span><div><h2>Teams Collaboration</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">3</div><div class="kpi-label">Total Teams</div><div class="kpi-description">Microsoft Teams workspaces in the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">2</div><div class="kpi-label">Inactive Teams</div><div class="kpi-description">Teams with no recorded activity in the last 90 days. May be candidates for archiving.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Teams Without Owners</div><div class="kpi-description">Teams with no assigned owner — an unmanaged workspace with no accountable steward.</div><span class="kpi-badge badge-good">Healthy</span></div></div>
+    <div class="narrative-card status-watch">
+  <span class="nar-icon">💬</span><span class="narrative-badge badge-watch">Watch</span>
+  <div class="narrative-headline">Minimal Teams activity in the last 90 days</div>
+  <div class="narrative-plain">Microsoft Teams is deployed but shows no measurable activity in the past 90 days. All teams are private and none are archived.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Underutilized collaboration tools may indicate missed productivity opportunities or redundant configuration.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Confirm whether Teams is intended for active collaboration and archive or remove unused teams if not required.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">💻</span><div><h2>Devices &amp; Endpoints</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">9</div><div class="kpi-label">Total Devices</div><div class="kpi-description">Devices registered in Entra ID — 6 Windows, 3 Android.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">5</div><div class="kpi-label">Stale Devices</div><div class="kpi-description">Devices that have not checked in recently. May represent decommissioned endpoints.</div><span class="kpi-badge badge-watch">Watch</span></div>
+<div class="kpi-card status-watch"><div class="kpi-value">0</div><div class="kpi-label">Intune Managed</div><div class="kpi-description">Devices actively managed through Microsoft Intune for compliance and policy enforcement.</div><span class="kpi-badge badge-watch">Watch</span></div></div>
+    <div class="narrative-card status-action">
+  <span class="nar-icon">💻</span><span class="narrative-badge badge-action">Action Recommended</span>
+  <div class="narrative-headline">Devices unmanaged and several marked stale</div>
+  <div class="narrative-plain">Nine devices are registered, but none are managed through Intune and over half are considered stale. Compliance status is unknown for all devices.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Unmanaged and stale devices increase the risk of unauthorized access and reduce control over corporate data.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Implement Intune device management and review or remove stale device registrations.</div>
+</div>
+  </div>
+</div>
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">✨</span><div><h2>Copilot Review</h2></div></div>
+  <div class="section-body">
+    <div class="kpi-grid"><div class="kpi-card status-info"><div class="kpi-value">1</div><div class="kpi-label">Copilot Licenses</div><div class="kpi-description">Microsoft 365 Copilot licenses purchased for the tenant.</div><span class="kpi-badge badge-info">Info</span></div>
+<div class="kpi-card status-good"><div class="kpi-value">0</div><div class="kpi-label">Unused Copilot Licenses</div><div class="kpi-description">Copilot licenses purchased but not yet assigned to any user.</div><span class="kpi-badge badge-good">Healthy</span></div>
+<div class="kpi-card status-na"><div class="kpi-value">N/A</div><div class="kpi-label">Active Copilot Users</div><div class="kpi-description">Usage activity data was not collected this run. Enable Copilot usage reporting for adoption insight.</div><span class="kpi-badge badge-na">Not Available</span></div>
+<div class="kpi-card status-info"><div class="kpi-value">CAD $40.00</div><div class="kpi-label">Copilot Monthly Spend</div><div class="kpi-description">Estimated monthly cost for all Copilot licenses based on available price data.</div><span class="kpi-badge badge-info">Info</span></div></div>
+    <div class="narrative-card status-info">
+  <span class="nar-icon">✨</span><span class="narrative-badge badge-info">Info</span>
+  <div class="narrative-headline">Single Copilot license fully assigned</div>
+  <div class="narrative-plain">One Microsoft Copilot license is purchased and assigned, with no unused capacity. Usage reporting has not been enabled.</div>
+  <div class="narrative-impact"><strong>Why it matters:</strong> Without usage insights, it is unclear whether the Copilot investment is delivering value.</div>
+  <div class="narrative-action"><strong>Recommended action:</strong> Enable Copilot usage reporting to measure adoption and return on investment.</div>
+</div>
+  </div>
+</div>
+
+<!-- ═══ TOP RECOMMENDATIONS ══════════════════════════════════════════════════ -->
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">🎯</span><div><h2>Top Recommendations</h2><div class="section-subtitle">Prioritised actions to improve the tenant</div></div></div>
+  <div class="section-body">
+    <div class="rec-card">
+  <div class="rec-priority">P1</div>
+  <div class="rec-body">
+    <div class="rec-title">Review 1049993 unassigned licenses before next renewal</div>
+    <div class="rec-why">1049993 purchased licenses are not currently assigned. Confirm whether they are reserved for upcoming growth or can be reduced at renewal.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Licensing</span>
+      <span class="rec-tag effort-low">Effort: Low</span>
+      <span class="rec-tag impact-high">Impact: Medium</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: License Manager / Finance</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P2</div>
+  <div class="rec-body">
+    <div class="rec-title">Review 17 inbox forwarding rules</div>
+    <div class="rec-why">Inbox rules that redirect or forward messages can route sensitive information outside the organisation if not governed. Each rule should be confirmed as intentional.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Exchange</span>
+      <span class="rec-tag effort-med">Effort: Medium</span>
+      <span class="rec-tag impact-high">Impact: Medium</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: Exchange Admin</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P3</div>
+  <div class="rec-body">
+    <div class="rec-title">Archive or clean up 2 inactive Teams</div>
+    <div class="rec-why">2 Teams have had no recorded activity in the last 90 days. Archiving removes clutter and prevents unmanaged access to stale content.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Teams</span>
+      <span class="rec-tag effort-low">Effort: Low</span>
+      <span class="rec-tag impact-high">Impact: Low</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: Teams Admin / Team Owners</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P4</div>
+  <div class="rec-body">
+    <div class="rec-title">Clean up 5 stale device records</div>
+    <div class="rec-why">Stale device records in Entra ID can skew compliance reporting and may represent endpoints that no longer have an active relationship with the tenant.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Devices</span>
+      <span class="rec-tag effort-low">Effort: Low</span>
+      <span class="rec-tag impact-high">Impact: Medium</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: IT Admin / Endpoint Team</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P5</div>
+  <div class="rec-body">
+    <div class="rec-title">Consider enrolling devices in Intune for management and compliance coverage</div>
+    <div class="rec-why">No devices appear to be Intune-managed. Intune provides compliance checking, policy enforcement, and Conditional Access integration — all of which strengthen security posture.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Devices</span>
+      <span class="rec-tag effort-high">Effort: High</span>
+      <span class="rec-tag impact-high">Impact: High</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: IT Admin / Security</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P6</div>
+  <div class="rec-body">
+    <div class="rec-title">Enable Copilot usage reporting to measure adoption</div>
+    <div class="rec-why">Usage activity data was not collected this run. Without it, it is not possible to confirm whether Copilot licenses are being actively used and delivering value.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Copilot</span>
+      <span class="rec-tag effort-low">Effort: Low</span>
+      <span class="rec-tag impact-high">Impact: Medium</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: IT Admin</span>
+    </div>
+  </div>
+</div>
+<div class="rec-card">
+  <div class="rec-priority">P7</div>
+  <div class="rec-body">
+    <div class="rec-title">Add price data for 9 SKUs missing cost information</div>
+    <div class="rec-why">Cost reporting is incomplete without pricing for all SKUs. Adding price data gives a more accurate and credible view of total monthly spend.</div>
+    <div class="rec-meta">
+      <span class="rec-tag">Licensing</span>
+      <span class="rec-tag effort-low">Effort: Low</span>
+      <span class="rec-tag impact-high">Impact: Low</span>
+      <span class="rec-tag badge-watch">Watch</span>
+      <span class="rec-tag">Owner: License Manager</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<!-- ═══ DATA COVERAGE ════════════════════════════════════════════════════════ -->
+<div class="report-section">
+  <div class="section-header"><span class="section-icon">🔍</span><div><h2>Data Coverage</h2><div class="section-subtitle">Status of each data source used in this report</div></div></div>
+  <div class="section-body">
+    <p style="font-size:0.9em;color:#555;margin-bottom:16px;">Some data sources may be unavailable depending on licensing, permissions, or configuration. Where a source was unavailable, its section is marked accordingly.</p>
+    <div class="coverage-grid">
+<div class="coverage-item"><div class="coverage-icon">🏢</div><div><div class="coverage-label">TenantOverview</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">💳</div><div><div class="coverage-label">LicenseInventory</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">👥</div><div><div class="coverage-label">UserInventory</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">📊</div><div><div class="coverage-label">LicenseUserAnalysis</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">📧</div><div><div class="coverage-label">MailboxInventory</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">📁</div><div><div class="coverage-label">SharePoint</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">💬</div><div><div class="coverage-label">Teams</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">💻</div><div><div class="coverage-label">Devices</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+<div class="coverage-item"><div class="coverage-icon">✨</div><div><div class="coverage-label">Copilot</div><div class="coverage-status"><span style="color:#27ae60">Collected</span></div></div></div>
+</div>
+  </div>
+</div>
+
+<!-- ═══ APPENDIX ═════════════════════════════════════════════════════════════ -->
+<div class="report-section">
+<div class="section-header"><span class="section-icon">📎</span><div><h2>Appendix</h2><div class="section-subtitle">Supporting data tables for technical reviewers</div></div></div>
+<div class="section-body">
+<div class="appendix-section"><h3>License SKUs</h3>
+<table class="data-table"><thead><tr><th>SKU</th><th>Status</th><th>Purchased</th><th>Assigned</th><th>Unused</th><th>Monthly Cost</th></tr></thead><tbody>
+<tr><td>POWER_BI_STANDARD</td><td>Enabled</td><td>1000001</td><td>1</td><td>1000000</td><td>—</td></tr>
+<tr><td>FLOW_FREE</td><td>Enabled</td><td>10000</td><td>2</td><td>9998</td><td>—</td></tr>
+<tr><td>CCIBOTS_PRIVPREV_VIRAL</td><td>Enabled</td><td>10000</td><td>1</td><td>9999</td><td>—</td></tr>
+<tr><td>POWERAPPS_VIRAL</td><td>Enabled</td><td>10000</td><td>1</td><td>9999</td><td>—</td></tr>
+<tr><td>Power_Pages_vTrial_for_Makers</td><td>Enabled</td><td>10000</td><td>1</td><td>9999</td><td>—</td></tr>
+<tr><td>POWERAPPS_DEV</td><td>Enabled</td><td>10000</td><td>2</td><td>9998</td><td>—</td></tr>
+<tr><td>Microsoft 365 Copilot</td><td>Enabled</td><td>1</td><td>1</td><td>0</td><td>CAD $40</td></tr>
+<tr><td>O365_BUSINESS_PREMIUM</td><td>Enabled</td><td>1</td><td>1</td><td>0</td><td>—</td></tr>
+<tr><td>POWERAUTOMATE_ATTENDED_RPA</td><td>Enabled</td><td>1</td><td>1</td><td>0</td><td>—</td></tr>
+<tr><td>Microsoft_Teams_Audio_Conferencing_select_dial_out</td><td>Enabled</td><td>1</td><td>1</td><td>0</td><td>—</td></tr>
+</tbody></table></div>
+<div class="appendix-section"><h3>Mailboxes with Forwarding</h3>
+<table class="data-table"><thead><tr><th>Display Name</th><th>Email</th><th>Type</th><th>External?</th><th>Forward To</th></tr></thead><tbody>
+<tr><td>Make a Booking with RTH Tech Services Inc.</td><td>MakeaBookingwithRTHTechServicesInc@rthtechservices.com</td><td>SchedulingMailbox</td><td>No</td><td>smtp:rohan@rthtechservices.com</td></tr>
+<tr><td>RTH Tech Services Inc.</td><td>RTHTechServicesInc1@rthtechservices.com</td><td>SchedulingMailbox</td><td>No</td><td>smtp:rohan@rthtechservices.com</td></tr>
+</tbody></table></div>
+<div class="appendix-section"><h3>Largest SharePoint Sites</h3>
+<table class="data-table"><thead><tr><th>Site</th><th>Storage Used</th><th>Last Modified</th><th>Files</th></tr></thead><tbody>
+<tr><td>General RTH Tech Owners</td><td>17.46 GB</td><td>2026-05-14</td><td>103</td></tr>
+<tr><td>98e686d9-5ca0-4802-aab4-eae6c6083b83</td><td>3.49 GB</td><td>2026-05-14</td><td>168</td></tr>
+<tr><td>HGLLP Owners</td><td>0.27 GB</td><td>2026-05-05</td><td>56</td></tr>
+<tr><td>RBS LLP Owners</td><td>0.26 GB</td><td>2025-10-25</td><td>37</td></tr>
+<tr><td>Rohan Hare</td><td>0.22 GB</td><td>2026-05-11</td><td>155</td></tr>
+<tr><td>SharePoint Administrator</td><td>0.18 GB</td><td>2026-05-05</td><td>1478</td></tr>
+<tr><td>Global Administrator</td><td>0.13 GB</td><td>2026-05-05</td><td>462</td></tr>
+<tr><td>Rohan Hare</td><td>0.05 GB</td><td>2026-05-14</td><td>55</td></tr>
+<tr><td>Rohan Hare</td><td>0.05 GB</td><td>2026-05-05</td><td>198</td></tr>
+<tr><td>NT Service\sptimerv4</td><td>0.01 GB</td><td>—</td><td>14</td></tr>
+<tr><td>System Account</td><td>0.00 GB</td><td>—</td><td>0</td></tr>
+<tr><td>System Account</td><td>0.00 GB</td><td>—</td><td>0</td></tr>
+<tr><td>System Account</td><td>0.00 GB</td><td>—</td><td>0</td></tr>
+<tr><td>System Account</td><td>0.00 GB</td><td>—</td><td>0</td></tr>
+<tr><td>System Account</td><td>0.00 GB</td><td>—</td><td>0</td></tr>
+</tbody></table></div>
+<div class="appendix-section"><h3>Teams Inventory</h3>
+<table class="data-table"><thead><tr><th>Team</th><th>Visibility</th><th>Created</th><th>Last Activity</th><th>Inactive?</th></tr></thead><tbody>
+<tr><td>General RTH Tech</td><td>Private</td><td>2021-02-17 12:08:18 PM</td><td>2025-11-11</td><td>Yes</td></tr>
+<tr><td>HGLLP</td><td>Private</td><td>2021-03-11 7:07:44 AM</td><td>2025-03-31</td><td>Yes</td></tr>
+<tr><td>RBS LLP</td><td>Private</td><td>2023-03-27 2:47:06 AM</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<div class="appendix-section"><h3>Stale Devices</h3>
+<table class="data-table"><thead><tr><th>Device</th><th>OS</th><th>Days Since Sign-In</th><th>Enabled</th><th>Intune</th></tr></thead><tbody>
+<tr><td>samsungSM-S928W</td><td>Android</td><td>690</td><td>No</td><td>No</td></tr>
+<tr><td>samsungSM-S908W</td><td>Android</td><td>213</td><td>Yes</td><td>No</td></tr>
+<tr><td>RTH-DELLXPS</td><td>Windows</td><td>96</td><td>Yes</td><td>No</td></tr>
+<tr><td>RTH-DELL-01</td><td>Windows</td><td>371</td><td>No</td><td>No</td></tr>
+<tr><td>RTH-PREDATOR</td><td>Windows</td><td>110</td><td>Yes</td><td>No</td></tr>
+</tbody></table></div>
+<div class="appendix-section"><h3>Copilot Licensed Users</h3>
+<table class="data-table"><thead><tr><th>User</th><th>Display Name</th><th>Stale?</th></tr></thead><tbody>
+<tr><td>rohan@rthtechservices.com</td><td>Rohan Hare</td><td>No</td></tr>
+</tbody></table></div>
+</div></div>
+
+</div><!-- /page -->
+</body>
+</html>

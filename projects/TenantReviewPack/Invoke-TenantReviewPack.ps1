@@ -441,6 +441,7 @@ function Invoke-TenantReviewConnection {
 . (Resolve-LocalScript 'src\AI\Invoke-AINarrative.ps1')
 . (Resolve-LocalScript 'src\Renderers\New-TenantReviewReport.ps1')
 . (Resolve-LocalScript 'src\Renderers\New-TenantReviewDeck.ps1')
+. (Resolve-LocalScript 'src\Renderers\New-TenantReviewWordDoc.ps1')
 
 if (-not (Test-Path $OutputPath)) {
     New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
@@ -557,6 +558,12 @@ if (-not $SkipRender) {
         New-TenantReviewDeck -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
     } catch {
         throw "Deck outline rendering failed after data export completed. $($_.Exception.Message)"
+    }
+
+    try {
+        New-TenantReviewWordDoc -TenantName $TenantName -ReviewPeriod $ReviewPeriod -Datasets $datasets -Narrative $narrative -OutputPath $runPath
+    } catch {
+        throw "Word document rendering failed after data export completed. $($_.Exception.Message)"
     }
 }
 

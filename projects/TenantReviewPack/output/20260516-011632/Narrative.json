@@ -1,0 +1,389 @@
+{
+  "dataset": "Narrative",
+  "generatedAt": "2026-05-16T01:18:32.3379808-07:00",
+  "source": "AI",
+  "tenantHealthStatement": "The tenant is in good standing. No major issues were identified during this review.",
+  "executiveSummaryBullets": [
+    "This review covers the RTH Tech Services Inc. Microsoft 365 tenant. The tenant has 15 user accounts — 10 members and 5 guests.",
+    "12 Microsoft 365 licenses are currently assigned with an estimated monthly spend of CAD $40 (partial — 9 SKUs are missing price data). 1049993 licenses appear unassigned.",
+    "Mail forwarding is active on 2 mailboxes, and 17 inbox forwarding rules were found. These should be confirmed as intentional.",
+    "2 of 3 Teams workspaces had no recorded activity in the last 90 days and may be candidates for archiving.",
+    "5 of 9 registered devices appear stale. Cleaning up outdated device records supports better compliance and security reporting.",
+    "1 Microsoft 365 Copilot license is assigned at an estimated CAD $40/month. Enable usage reporting to confirm active adoption."
+  ],
+  "sections": [
+    {
+      "dataset": "TenantOverview",
+      "headline": "Tenant configuration is stable and fully verified",
+      "plainEnglish": "RTH Tech Services Inc. has a properly configured Microsoft 365 tenant with all five domains verified and no federation in place. Core setup appears stable and centrally managed.",
+      "detailedAnalysis": "The tenant for rthtechservices.com was created on 2021-01-27 and includes 5 domains, all of which are verified, with 0 federated domains. A tenant ID is present and 69 service plans are assigned across the environment. One technical notification address (rohan@rthtechservices.com) is configured. Password validity period is not set in the available data.",
+      "businessImpact": "A properly verified and non-federated tenant reduces identity complexity and supports predictable authentication behavior.",
+      "recommendedAction": "Confirm password expiration policy and validate that the technical notification address is monitored and backed up.",
+      "confidence": "High",
+      "status": "Good"
+    },
+    {
+      "dataset": "LicenseInventory",
+      "headline": "License inventory shows significant SKU count anomaly",
+      "plainEnglish": "The tenant reports over one million purchased licenses but only 12 assigned, with an estimated total cost of $40 CAD per month. This discrepancy suggests reporting or SKU configuration issues rather than actual spend.",
+      "detailedAnalysis": "Across 10 SKUs, 1,050,005 licenses are reported as purchased, with only 12 assigned and 1,049,993 marked unused. Despite this, the estimated monthly cost is $40 CAD ($480 annually), and unused cost is calculated at $0, indicating most SKUs lack pricing data. Nine SKUs are missing pricing information, including O365_BUSINESS_PREMIUM and several Power Platform and Teams add-ons, which limits accurate cost analysis.",
+      "businessImpact": "Inaccurate license counts and missing pricing data can obscure true spend and complicate budgeting or compliance reviews.",
+      "recommendedAction": "Review license subscriptions in the Microsoft 365 admin center to validate actual quantities and ensure pricing data is complete for accurate cost reporting.",
+      "confidence": "Medium",
+      "status": "Watch"
+    },
+    {
+      "dataset": "UserInventory",
+      "headline": "Most users unlicensed and no sign-in tracking enabled",
+      "plainEnglish": "The tenant contains 15 users, but only 2 are licensed and sign-in activity reporting has not been enabled. This limits visibility into actual usage and risk.",
+      "detailedAnalysis": "There are 15 total users (10 members and 5 guests), all enabled, with 2 licensed and 13 unlicensed accounts. No users are marked stale or disabled, and no guests have licenses assigned. Sign-in activity data was not requested and is not available, leaving 15 users without sign-in visibility.",
+      "businessImpact": "Limited licensing and lack of sign-in data reduce oversight of account activity and potential security exposure.",
+      "recommendedAction": "Enable Azure AD sign-in activity reporting and review whether unlicensed accounts are required or should be removed.",
+      "confidence": "High",
+      "status": "ActionRecommended"
+    },
+    {
+      "dataset": "LicenseUserAnalysis",
+      "headline": "High reported unused license count requires validation",
+      "plainEnglish": "Nearly all reported licenses appear unused, but no direct cost impact is calculated. This likely reflects a reporting inconsistency rather than actual financial waste.",
+      "detailedAnalysis": "The analysis shows 1,049,993 unused licenses with $0 estimated unused monthly and annual cost. There are no disabled, stale, or guest users consuming licenses. One attention item is flagged, likely tied to the extreme unused license count discrepancy.",
+      "businessImpact": "If accurate, unused licenses could represent financial waste; if inaccurate, reporting gaps may undermine governance decisions.",
+      "recommendedAction": "Reconcile subscription counts against Microsoft billing to confirm true license quantities and eliminate reporting anomalies.",
+      "confidence": "Medium",
+      "status": "Watch"
+    },
+    {
+      "dataset": "MailboxInventory",
+      "headline": "Mailbox storage heavily concentrated in one shared mailbox",
+      "plainEnglish": "Email usage is modest overall, but one shared mailbox holds nearly all reported storage. Two mailboxes have forwarding enabled, both routing internally.",
+      "detailedAnalysis": "There are 9 mailboxes (1 user, 4 shared, 1 room, others specialized), with 2 mailboxes configured for forwarding and none forwarding externally. Six transport rules are enabled. Total reported mailbox size is 186,719,056.42 GB, with the \"Escala\" shared mailbox alone accounting for 186,719,051.28 GB and only 845 items, indicating a likely reporting anomaly. Seventeen inbox forwarding rules were identified across 9 scanned mailboxes.",
+      "businessImpact": "Mailbox size anomalies and forwarding rules can mask data governance or security risks if not validated.",
+      "recommendedAction": "Validate mailbox statistics for accuracy, review the Escala shared mailbox, and assess the necessity of existing inbox forwarding rules.",
+      "confidence": "Medium",
+      "status": "ActionRecommended"
+    },
+    {
+      "dataset": "SharePoint",
+      "headline": "Low SharePoint utilization with no external sharing",
+      "plainEnglish": "SharePoint usage is light, with 38 sites consuming a small portion of the available storage and no external sharing enabled. OneDrive reporting was not collected.",
+      "detailedAnalysis": "The tenant has 38 SharePoint sites using 22.12 GB out of a 972,800 GB quota. The largest site, \"General RTH Tech Owners,\" uses 17.46 GB. No sites have external sharing enabled. OneDrive reporting was not requested, and no OneDrive accounts or storage metrics are available.",
+      "businessImpact": "Low storage utilization reduces risk, but missing OneDrive visibility limits full assessment of data exposure.",
+      "recommendedAction": "Enable OneDrive reporting and periodically review site ownership and lifecycle to prevent sprawl.",
+      "confidence": "High",
+      "status": "Good"
+    },
+    {
+      "dataset": "Teams",
+      "headline": "Minimal Teams activity in the last 90 days",
+      "plainEnglish": "Microsoft Teams is deployed but shows no measurable activity in the past 90 days. All teams are private and none are archived.",
+      "detailedAnalysis": "There are 3 total Teams, with 0 active and 2 inactive during the 90-day reporting period. All 3 Teams are private, with no public teams and none archived. No channel messages or meetings were recorded in the reporting window, and owner/member counts were not included.",
+      "businessImpact": "Underutilized collaboration tools may indicate missed productivity opportunities or redundant configuration.",
+      "recommendedAction": "Confirm whether Teams is intended for active collaboration and archive or remove unused teams if not required.",
+      "confidence": "Medium",
+      "status": "Watch"
+    },
+    {
+      "dataset": "Devices",
+      "headline": "Devices unmanaged and several marked stale",
+      "plainEnglish": "Nine devices are registered, but none are managed through Intune and over half are considered stale. Compliance status is unknown for all devices.",
+      "detailedAnalysis": "The tenant lists 9 devices (6 Windows, 3 Android), with 7 enabled and 2 disabled. Five devices are marked stale. No devices are managed by Intune, and compliance data is unavailable, resulting in 9 devices with unknown compliance state.",
+      "businessImpact": "Unmanaged and stale devices increase the risk of unauthorized access and reduce control over corporate data.",
+      "recommendedAction": "Implement Intune device management and review or remove stale device registrations.",
+      "confidence": "High",
+      "status": "ActionRecommended"
+    },
+    {
+      "dataset": "Copilot",
+      "headline": "Single Copilot license fully assigned",
+      "plainEnglish": "One Microsoft Copilot license is purchased and assigned, with no unused capacity. Usage reporting has not been enabled.",
+      "detailedAnalysis": "The tenant has 1 Copilot SKU with 1 license purchased and assigned, and 0 unused. Estimated monthly cost is $40 CAD, with no unused spend. Usage reporting was not requested, so active usage metrics are unavailable.",
+      "businessImpact": "Without usage insights, it is unclear whether the Copilot investment is delivering value.",
+      "recommendedAction": "Enable Copilot usage reporting to measure adoption and return on investment.",
+      "confidence": "High",
+      "status": "Informational"
+    }
+  ],
+  "kpis": [
+    {
+      "area": "Users",
+      "label": "Total Users",
+      "value": "15",
+      "rawValue": 15,
+      "description": "All accounts in the tenant — 10 members and 5 guests.",
+      "status": "Informational"
+    },
+    {
+      "area": "Users",
+      "label": "Guest Users",
+      "value": "5",
+      "rawValue": 5,
+      "description": "External users with access to tenant resources. Review periodically to confirm ongoing need.",
+      "status": "Watch"
+    },
+    {
+      "area": "Users",
+      "label": "Stale Users",
+      "value": "N/A",
+      "rawValue": null,
+      "description": "Sign-in activity data was not collected this run. Enable sign-in reporting to detect dormant accounts.",
+      "status": "NotAvailable"
+    },
+    {
+      "area": "Licensing",
+      "label": "Licensed Users",
+      "value": "12",
+      "rawValue": 12,
+      "description": "Microsoft 365 license assignments currently active in the tenant.",
+      "status": "Informational"
+    },
+    {
+      "area": "Licensing",
+      "label": "Unused Licenses",
+      "value": "1,049,993",
+      "rawValue": 1049993,
+      "description": "Purchased licenses not currently assigned to any user.",
+      "status": "ActionRecommended"
+    },
+    {
+      "area": "Licensing",
+      "label": "Est. Monthly Spend",
+      "value": "CAD $40.00",
+      "rawValue": 40.0,
+      "description": "Estimated total monthly license cost based on available SKU price data.",
+      "status": "Informational"
+    },
+    {
+      "area": "Licensing",
+      "label": "Disabled Licensed Users",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Disabled accounts that still have Microsoft 365 licenses assigned.",
+      "status": "Good"
+    },
+    {
+      "area": "Licensing",
+      "label": "Stale Licensed Users",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Licensed accounts with no recent sign-in. May no longer need paid licenses.",
+      "status": "Good"
+    },
+    {
+      "area": "Exchange",
+      "label": "Total Mailboxes",
+      "value": "9",
+      "rawValue": 9,
+      "description": "All mailboxes in Exchange Online — 4 shared mailboxes included.",
+      "status": "Informational"
+    },
+    {
+      "area": "Exchange",
+      "label": "Mailboxes with Forwarding",
+      "value": "2",
+      "rawValue": 2,
+      "description": "Mailboxes configured to forward messages to another address.",
+      "status": "Watch"
+    },
+    {
+      "area": "Exchange",
+      "label": "External Forwarding",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Mailboxes suspected of forwarding messages outside the organisation. Should be reviewed.",
+      "status": "Good"
+    },
+    {
+      "area": "Exchange",
+      "label": "Inbox Forwarding Rules",
+      "value": "17",
+      "rawValue": 17,
+      "description": "Inbox rules configured to redirect or forward messages found across scanned mailboxes.",
+      "status": "ActionRecommended"
+    },
+    {
+      "area": "SharePoint",
+      "label": "SharePoint Sites",
+      "value": "38",
+      "rawValue": 38,
+      "description": "Total SharePoint Online sites in the tenant.",
+      "status": "Informational"
+    },
+    {
+      "area": "SharePoint",
+      "label": "SharePoint Storage",
+      "value": "22.1 GB",
+      "rawValue": 22.12,
+      "description": "Total storage used across all SharePoint sites.",
+      "status": "Informational"
+    },
+    {
+      "area": "SharePoint",
+      "label": "External Sharing Sites",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Sites with external sharing enabled. Should be intentional and regularly reviewed.",
+      "status": "Good"
+    },
+    {
+      "area": "SharePoint",
+      "label": "OneDrive Accounts",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Personal OneDrive accounts provisioned in the tenant.",
+      "status": "Informational"
+    },
+    {
+      "area": "Teams",
+      "label": "Total Teams",
+      "value": "3",
+      "rawValue": 3,
+      "description": "Microsoft Teams workspaces in the tenant.",
+      "status": "Informational"
+    },
+    {
+      "area": "Teams",
+      "label": "Inactive Teams",
+      "value": "2",
+      "rawValue": 2,
+      "description": "Teams with no recorded activity in the last 90 days. May be candidates for archiving.",
+      "status": "Watch"
+    },
+    {
+      "area": "Teams",
+      "label": "Teams Without Owners",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Teams with no assigned owner — an unmanaged workspace with no accountable steward.",
+      "status": "Good"
+    },
+    {
+      "area": "Devices",
+      "label": "Total Devices",
+      "value": "9",
+      "rawValue": 9,
+      "description": "Devices registered in Entra ID — 6 Windows, 3 Android.",
+      "status": "Informational"
+    },
+    {
+      "area": "Devices",
+      "label": "Stale Devices",
+      "value": "5",
+      "rawValue": 5,
+      "description": "Devices that have not checked in recently. May represent decommissioned endpoints.",
+      "status": "Watch"
+    },
+    {
+      "area": "Devices",
+      "label": "Intune Managed",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Devices actively managed through Microsoft Intune for compliance and policy enforcement.",
+      "status": "Watch"
+    },
+    {
+      "area": "Copilot",
+      "label": "Copilot Licenses",
+      "value": "1",
+      "rawValue": 1,
+      "description": "Microsoft 365 Copilot licenses purchased for the tenant.",
+      "status": "Informational"
+    },
+    {
+      "area": "Copilot",
+      "label": "Unused Copilot Licenses",
+      "value": "0",
+      "rawValue": 0,
+      "description": "Copilot licenses purchased but not yet assigned to any user.",
+      "status": "Good"
+    },
+    {
+      "area": "Copilot",
+      "label": "Active Copilot Users",
+      "value": "N/A",
+      "rawValue": null,
+      "description": "Usage activity data was not collected this run. Enable Copilot usage reporting for adoption insight.",
+      "status": "NotAvailable"
+    },
+    {
+      "area": "Copilot",
+      "label": "Copilot Monthly Spend",
+      "value": "CAD $40.00",
+      "rawValue": 40.0,
+      "description": "Estimated monthly cost for all Copilot licenses based on available price data.",
+      "status": "Informational"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": 1,
+      "category": "Licensing",
+      "status": "Watch",
+      "title": "Review 1049993 unassigned licenses before next renewal",
+      "why": "1049993 purchased licenses are not currently assigned. Confirm whether they are reserved for upcoming growth or can be reduced at renewal.",
+      "owner": "License Manager / Finance",
+      "effort": "Low",
+      "impact": "Medium"
+    },
+    {
+      "priority": 2,
+      "category": "Exchange",
+      "status": "Watch",
+      "title": "Review 17 inbox forwarding rules",
+      "why": "Inbox rules that redirect or forward messages can route sensitive information outside the organisation if not governed. Each rule should be confirmed as intentional.",
+      "owner": "Exchange Admin",
+      "effort": "Medium",
+      "impact": "Medium"
+    },
+    {
+      "priority": 3,
+      "category": "Teams",
+      "status": "Watch",
+      "title": "Archive or clean up 2 inactive Teams",
+      "why": "2 Teams have had no recorded activity in the last 90 days. Archiving removes clutter and prevents unmanaged access to stale content.",
+      "owner": "Teams Admin / Team Owners",
+      "effort": "Low",
+      "impact": "Low"
+    },
+    {
+      "priority": 4,
+      "category": "Devices",
+      "status": "Watch",
+      "title": "Clean up 5 stale device records",
+      "why": "Stale device records in Entra ID can skew compliance reporting and may represent endpoints that no longer have an active relationship with the tenant.",
+      "owner": "IT Admin / Endpoint Team",
+      "effort": "Low",
+      "impact": "Medium"
+    },
+    {
+      "priority": 5,
+      "category": "Devices",
+      "status": "Watch",
+      "title": "Consider enrolling devices in Intune for management and compliance coverage",
+      "why": "No devices appear to be Intune-managed. Intune provides compliance checking, policy enforcement, and Conditional Access integration — all of which strengthen security posture.",
+      "owner": "IT Admin / Security",
+      "effort": "High",
+      "impact": "High"
+    },
+    {
+      "priority": 6,
+      "category": "Copilot",
+      "status": "Watch",
+      "title": "Enable Copilot usage reporting to measure adoption",
+      "why": "Usage activity data was not collected this run. Without it, it is not possible to confirm whether Copilot licenses are being actively used and delivering value.",
+      "owner": "IT Admin",
+      "effort": "Low",
+      "impact": "Medium"
+    },
+    {
+      "priority": 7,
+      "category": "Licensing",
+      "status": "Watch",
+      "title": "Add price data for 9 SKUs missing cost information",
+      "why": "Cost reporting is incomplete without pricing for all SKUs. Adding price data gives a more accurate and credible view of total monthly spend.",
+      "owner": "License Manager",
+      "effort": "Low",
+      "impact": "Low"
+    }
+  ],
+  "warnings": []
+}
