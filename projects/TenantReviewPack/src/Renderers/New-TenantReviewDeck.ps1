@@ -121,7 +121,7 @@ function New-TenantReviewDeck {
     # ── Slide 1: Cover ───────────────────────────────────────────────────────
 
     Add-Slide -L $lines -Num 1 -Title 'Cover' `
-        -Visual 'Full-bleed gradient background (#5a2f61 → #4fa7db). Client logo (placeholder) centred. Review period and "Microsoft 365 Tenant Review" in white text. RTH Tech Services branding bottom right.' `
+        -Visual 'Full-bleed gradient background (#5a2f61 -> #4fa7db). Client logo area centred when available. Review period and "Microsoft 365 Tenant Review" in white text. RTH Tech Services branding bottom right.' `
         -BigMessage "Microsoft 365 Tenant Review — $orgName — $ReviewPeriod" `
         -SpeakerNotes @(
             "Welcome the client. Introduce this as their Microsoft 365 Quarterly Business Review.",
@@ -370,7 +370,7 @@ function New-TenantReviewDeck {
     }
 
     Add-Slide -L $lines -Num 12 -Title 'Next Quarter Action Plan' `
-        -Visual 'Kanban-style columns: Immediate (P1) / This Quarter (P2) / Roadmap (P3+). Each item is a card with owner and due date placeholder.' `
+        -Visual 'Kanban-style columns: Immediate (P1) / This Quarter (P2) / Roadmap (P3+). Each item is a card with owner and target due date.' `
         -BigMessage "Commit to actions before this meeting closes" `
         -Bullets $actionLines `
         -SpeakerNotes @(

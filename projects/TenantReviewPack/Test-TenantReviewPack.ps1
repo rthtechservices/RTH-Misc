@@ -46,7 +46,8 @@ $expectedFunctions = @(
     'Get-LicenseUserAnalysis',
     'Invoke-AINarrative',
     'New-TenantReviewReport',
-    'New-TenantReviewDeck'
+    'New-TenantReviewDeck',
+    'New-TenantReviewWordDoc'
 )
 
 foreach ($functionName in $expectedFunctions) {
@@ -112,7 +113,7 @@ try {
         LicenseUserAnalysis = $analysis
         MailboxInventory = [pscustomobject]@{ dataset = 'MailboxInventory'; summary = [pscustomobject]@{ mailboxesForwardingExternally = 0 }; items = @(); warnings = @() }
         SharePoint = [pscustomobject]@{ dataset = 'SharePointInventory'; summary = [pscustomobject]@{ totalSites = 1; externalSharingEnabledSites = 0 }; items = @(); warnings = @() }
-        Teams = [pscustomobject]@{ dataset = 'TeamsInventory'; summary = [pscustomobject]@{ inactiveTeams = 0 }; items = @(); warnings = @() }
+        Teams = [pscustomobject]@{ dataset = 'TeamsInventory'; summary = [pscustomobject]@{ totalTeams = 1; inactiveTeams = 0 }; items = @(); warnings = @() }
         Devices = [pscustomobject]@{ dataset = 'DeviceInventory'; summary = [pscustomobject]@{ staleDevices = 0 }; items = @(); warnings = @() }
         Copilot = [pscustomobject]@{ dataset = 'CopilotInventory'; summary = [pscustomobject]@{ copilotUnused = 2 }; items = @(); warnings = @() }
     }
@@ -126,10 +127,38 @@ try {
     try {
         New-TenantReviewReport -TenantName 'Test Tenant' -ReviewPeriod 'Test Period' -Datasets $datasets -Narrative $narrative -OutputPath $renderPath
         New-TenantReviewDeck -TenantName 'Test Tenant' -ReviewPeriod 'Test Period' -Datasets $datasets -Narrative $narrative -OutputPath $renderPath
-        foreach ($expectedOutput in @('TenantReviewReport.md', 'TenantReviewReport.html', 'TenantReviewDeckOutline.md')) {
+        New-TenantReviewWordDoc -TenantName 'Test Tenant' -ReviewPeriod 'Test Period' -Datasets $datasets -Narrative $narrative -OutputPath $renderPath
+        foreach ($expectedOutput in @('TenantReviewReport.md', 'TenantReviewReport.html', 'TenantReviewDeckOutline.md', 'TenantReviewDetailedReport.docx')) {
             if (-not (Test-Path (Join-Path $renderPath $expectedOutput))) {
                 $failures.Add("Renderer mock test did not create $expectedOutput.")
             }
+        }
+
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $docxPath = Join-Path $renderPath 'TenantReviewDetailedReport.docx'
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($docxPath)
+        try {
+            $entry = $zip.GetEntry('word/document.xml')
+            $reader = [System.IO.StreamReader]::new($entry.Open())
+            $documentXml = $reader.ReadToEnd()
+            $reader.Dispose()
+            $documentText = (($documentXml -split '<w:t[^>]*>') | Select-Object -Skip 1 | ForEach-Object {
+                [System.Net.WebUtility]::HtmlDecode(($_ -split '</w:t>')[0])
+            }) -join "`n"
+
+            foreach ($forbiddenText in @('System.Object[]', ('implementation' + 'Status'), ('Stub' + ' -'), 'Microsoft.Graph.PowerShell.Models', '@{')) {
+                if ($documentText.Contains($forbiddenText)) {
+                    $failures.Add("Word renderer emitted forbidden text: $forbiddenText")
+                }
+            }
+
+            foreach ($requiredHeading in @('Executive Summary','Key Metrics at a Glance','Tenant Overview','Cost & Licensing Review','Identity & User Review','Exchange & Mail Flow','SharePoint & OneDrive','Teams Collaboration','Devices & Endpoints','Copilot Review','Top Recommendations','Data Coverage','Appendix')) {
+                if (-not $documentText.Contains($requiredHeading)) {
+                    $failures.Add("Word renderer missing required heading: $requiredHeading")
+                }
+            }
+        } finally {
+            $zip.Dispose()
         }
     } finally {
         if (Test-Path $renderPath) {
